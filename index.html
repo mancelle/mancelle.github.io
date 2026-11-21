@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mancelle is an encoder–decoder language model trained to take steering signals from sparse autoencoder features. Explore the model, code, data, and evaluations.">
+  <title>Mancelle — Steering language models with sparse features</title>
+  <link rel="icon" href="./assets/icon.png" type="image/png">
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header wrap">
+    <a class="brand" href="./"><img src="./assets/icon.png" width="28" height="28" alt="">Mancelle</a>
+    <nav aria-label="Main"><a href="#approach">Approach</a><a href="#evaluations">Evaluations</a><a href="#resources">Resources</a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="title">
+      <div>
+        <h1 id="title">Steering language models with <em>sparse features.</em></h1>
+        <p>Mancelle is an encoder–decoder language model that learns to use sparse autoencoder features as conditioning signals. During generation, changing those features changes the signal available to the model.</p>
+        <div class="actions">
+          <a class="button primary" href="https://huggingface.co/d0rb/Mancelle-3B/tree/307c97be4900f9eaf2f9375c7918346c94b07295">Download Mancelle-3B <span aria-hidden="true">↗</span></a>
+          <a class="button" href="https://github.com/d0rbu/mancelle/tree/0a80d5a8fdb14aeef514874fa089fe740aa04a7f">View code <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <figure class="architecture">
+        <figcaption>Feature conditioning in Mancelle</figcaption>
+        <div class="flow-line">
+          <span class="node feature">Sparse features</span>
+          <span class="arrow" aria-hidden="true">→</span>
+          <span class="node encoder">Feature encoder</span>
+        </div>
+        <div class="cross">Cross-attention <span aria-hidden="true">↓</span></div>
+        <div class="flow-line">
+          <span class="node">Text tokens</span>
+          <span class="arrow" aria-hidden="true">→</span>
+          <span class="node decoder">Language decoder</span>
+        </div>
+        <div class="cross">Next-token prediction <span aria-hidden="true">↓</span></div>
+      </figure>
+    </section>
+    <section class="wrap band" id="approach">
+      <h2>Approach</h2>
+      <div class="explanation">
+        <p>During training, a sparse autoencoder supplies features for text segments. A bidirectional feature encoder processes those activations, and the language decoder attends to the encoded features alongside its token context.</p>
+        <p>At inference, Mancelle can condition on its own predicted features or use natural-language steering via retrieval or a feature encoder. The public 3B checkpoint is the revised supervised fine-tuned model at step 1120.</p>
+      </div>
+    </section>
+    <section class="wrap band results" id="evaluations">
+      <div>
+        <h2>Evaluations</h2>
+        <p>We measure concept presence, instruction relevance, and fluency across steering settings. The release includes ChatCORE, clean steering, negative steering, and robustness evaluations, with figure inputs and reproduction scripts.</p>
+        <p class="figure-note">The negative-steering figure compares concept suppression with response quality across two suppression signals. Its quality axis is the harmonic mean of fluency and instruction relevance.</p>
+        <a class="text-link" href="https://github.com/d0rbu/mancelle/releases/tag/paper-evaluations-v1">Results and reproduction files <span aria-hidden="true">↗</span></a>
+      </div>
+      <figure class="result-figure">
+        <a href="./assets/negative-steering.png"><img src="./assets/negative-steering.png" width="2550" height="2790" loading="lazy" alt="Eight panels comparing negative steering for Mancelle and decoder-only baselines, plotting concept score against the harmonic mean of fluency and instruction relevance."></a>
+        <figcaption>Negative steering across four model comparisons. <a href="./assets/negative-steering.png">Open full-size figure</a></figcaption>
+      </figure>
+    </section>
+    <section class="wrap band" id="resources">
+      <h2>Resources</h2>
+      <ul class="resources">
+        <li><a href="https://github.com/d0rbu/mancelle/tree/0a80d5a8fdb14aeef514874fa089fe740aa04a7f"><strong>Research code</strong><span>Training and evaluation implementation</span></a></li>
+        <li><a href="https://huggingface.co/d0rb/Mancelle-3B/tree/307c97be4900f9eaf2f9375c7918346c94b07295"><strong>Model checkpoint</strong><span>Native weights, tokenizer, and configuration</span></a></li>
+        <li><a href="https://huggingface.co/buckets/henryac/nano-gpt-pretrain-steer"><strong>Pretraining features</strong><span>Raw and packed sparse autoencoder features</span></a></li>
+        <li><a href="https://github.com/d0rbu/mancelle/releases/tag/paper-data-v1"><strong>Fine-tuning dataset</strong><span>Conversations, mixture manifest, and checksums</span></a></li>
+      </ul>
+    </section>
+  </main>
+  <footer class="site-footer wrap"><a href="./">Mancelle</a><a href="https://github.com/mancelle/mancelle.github.io">Website source</a></footer>
+</body>
+</html>

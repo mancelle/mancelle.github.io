@@ -106,56 +106,433 @@
             <section class="fig1-card" data-step="1">
               <h4><span class="fig1-num">1</span>Segment</h4>
               <p class="fig1-doc"><span class="seg s1">… parameterizing the points on the</span> <span class="seg s2">circles. The fact that the line connecting the points of tangency is <u class="a-phrase">tangent to both circles</u> <span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span> gives us a condition on the angles: the line is perpendicular to</span> <span class="seg s3">the radii at the points of tangency.</span></p>
-              <ul class="fig1-facts"><li>FineWeb-Edu documents, cut into segments of <b>128 Gemma-3 tokens</b> (about 256 tokens for our tokenizer)</li><li>Short tail segments are kept: a 280-token document becomes <b>128 + 128 + 24</b></li></ul>
+              <div class="fig1-docbar" aria-label="A 280-token document cut into segments of 128, 128 and 24 tokens"><span class="seg s1" style="flex:128">128</span><span class="seg s2" style="flex:128">128</span><span class="seg s3" style="flex:24">24</span></div>
+              <p class="fig1-note fig1-center">a 280-token document: short tail segments are kept</p>
+              <ul class="fig1-facts"><li>FineWeb-Edu documents, cut into segments of <b>128 Gemma-3 tokens</b> (about 256 tokens for our tokenizer)</li></ul>
             </section>
             <section class="fig1-card" data-step="2">
               <h4><span class="fig1-num">2</span>Splice</h4>
-              <div class="fig1-chips"><span class="seg s1">seg 1</span><span class="seg s2">seg 2</span><span class="seg s3">seg 3</span></div>
-              <p class="fig1-note">kept, prob. 0.85</p>
-              <div class="fig1-down" aria-hidden="true">↓</div>
-              <div class="fig1-chips"><span class="seg s1">seg 1</span><span class="seg s2">seg 2</span><span class="seg s0">other</span></div>
-              <p class="fig1-note">swapped for another document, prob. 0.15</p>
-              <ul class="fig1-facts"><li><b>15%</b> of segment boundaries are spliced: the continuations at those cuts are shuffled among them</li><li>The segment that originally followed is kept as the <b>counterfactual</b> (used in step 4)</li><li>Documents that grow past the <b>2,048-token</b> context are cut; the trailing segments become new documents</li></ul>
+              <div class="fig1-splice">
+                <div class="sp-row"><span class="sp-lab">doc A</span><span class="seg s1">A1</span><span class="seg s2">A2</span><span class="sp-cut" aria-label="cut">✂</span><span class="seg s3">A3</span><span class="seg s4">A4</span></div>
+                <div class="sp-row"><span class="sp-lab">doc B</span><span class="seg b1">B1</span><span class="sp-cut" aria-label="cut">✂</span><span class="seg b2">B2</span><span class="seg b3">B3</span></div>
+              </div>
+              <p class="fig1-note fig1-center">each boundary: kept, prob. 0.85 · cut, prob. 0.15</p>
+              <div class="fig1-down" aria-hidden="true">↓ continuations shuffled among the cuts</div>
+              <div class="fig1-splice">
+                <div class="sp-row"><span class="sp-lab">new A</span><span class="seg s1">A1</span><span class="seg s2">A2</span><span class="sp-join"></span><span class="seg b2">B2</span><span class="seg b3">B3</span></div>
+                <div class="sp-row"><span class="sp-lab">new B</span><span class="seg b1">B1</span><span class="sp-join"></span><span class="seg s3">A3</span><span class="seg s4">A4</span></div>
+                <div class="sp-row sp-cf"><span class="sp-lab">counterfactual</span><span class="seg s3 is-ghost">A3</span><span class="sp-cf-note">originally followed A2</span></div>
+              </div>
+              <ul class="fig1-facts"><li><b>15%</b> of segment boundaries are spliced: the continuations at those cuts are shuffled among them</li><li>The segment that originally followed a cut is the <b>counterfactual</b>; step 4 uses it for negative units</li><li>Documents that grow past the <b>2,048-token</b> context are cut; the trailing segments become new documents</li></ul>
             </section>
             <section class="fig1-card" data-step="3">
               <h4><span class="fig1-num">3</span>Extract features</h4>
-              <svg class="fig1-grid" viewBox="0 0 196 180" role="img" aria-label="Token-by-feature SAE activations, reduced by a max over tokens to one vector per segment">
-                <text x="104" y="10" class="fig1-svg-note" text-anchor="middle">SAE features →</text>
-                <text x="8" y="66" class="fig1-svg-note" text-anchor="middle" transform="rotate(-90 8 66)">tokens</text>
-                <g class="fig1-cells"><rect x="24" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="18" width="19" height="14" rx="2.5" fill="#cde2fb"></rect><rect x="108" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="34" width="19" height="14" rx="2.5" fill="#cde2fb"></rect><rect x="45" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="34" width="19" height="14" rx="2.5" fill="#86b6ef"></rect><rect x="129" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="50" width="19" height="14" rx="2.5" fill="#86b6ef" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="66" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="66" width="19" height="14" rx="2.5" fill="#86b6ef" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="87" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="66" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="129" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect class="a-cell" x="87" y="82" width="19" height="14" rx="2.5" fill="#2a78d6" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="108" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="82" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="150" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="98" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="45" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="98" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="171" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect></g>
-                <text x="104" y="134" class="fig1-svg-note" text-anchor="middle">max over tokens ↓</text>
-                <g class="fig1-vec"><rect x="24" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="45" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect x="66" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect class="a-cell" x="87" y="142" width="19" height="16" rx="2.5" fill="#2a78d6"></rect><rect x="108" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect x="129" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="150" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="171" y="142" width="19" height="16" rx="2.5" fill="#eef0f2"></rect></g>
-                <g class="fig1-a fig1-a-svg" tabindex="0"><circle cx="96.5" cy="170" r="7"></circle><text x="96.5" y="173.5" text-anchor="middle">A</text></g>
-              </svg>
-              <p class="fig1-note fig1-center">one vector per segment</p>
-              <ul class="fig1-facts"><li>Each segment runs through <b>Gemma-3-4B</b> on its own; non-first segments get a &lt;BOS&gt;, whose activation is dropped</li><li><b>Gemma Scope 2</b> SAE on layer 22 gives <b>65,536</b> latents per token, max-pooled over the segment</li></ul>
+              <div class="fig1-split"><div class="fig1-split-main">
+              <div class="fig1-scroll"><svg class="fig1-heat" viewBox="0 0 620 243" role="img" aria-label="Per-token percentiles of the ten most active units in segment 2, and their maximum over the segment">
+<text x="160" y="19.0" class="fig1-heat-unit" text-anchor="end">geometry and triangles</text>
+<rect x="168.0" y="8.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="8.0" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>.: 52.5</title></rect>
+<rect x="193.0" y="8.0" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>The: 55.2</title></rect>
+<rect x="205.5" y="8.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="8.0" width="11" height="15" rx="1.5" fill="#cde2fb"><title>that: 30.8</title></rect>
+<rect x="230.5" y="8.0" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>the: 50.5</title></rect>
+<rect x="243.0" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>line: 86.7</title></rect>
+<rect x="255.5" y="8.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>connecting: 84.1</title></rect>
+<rect x="268.0" y="8.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>the: 80.2</title></rect>
+<rect x="280.5" y="8.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>points: 74.4</title></rect>
+<rect x="293.0" y="8.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>of: 76.0</title></rect>
+<rect x="305.5" y="8.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>tang: 84.0</title></rect>
+<rect x="318.0" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>ency: 93.8</title></rect>
+<rect x="330.5" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>is: 97.1</title></rect>
+<rect x="343.0" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>tangent: 92.2</title></rect>
+<rect x="355.5" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>to: 93.0</title></rect>
+<rect x="368.0" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>both: 88.8</title></rect>
+<rect x="380.5" y="8.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>circles: 82.4</title></rect>
+<rect x="393.0" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>gives: 85.1</title></rect>
+<rect x="405.5" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>us: 87.0</title></rect>
+<rect x="418.0" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>a: 89.2</title></rect>
+<rect x="430.5" y="8.0" width="11" height="15" rx="1.5" fill="#cde2fb"><title>condition: 40.0</title></rect>
+<rect x="443.0" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>on: 90.7</title></rect>
+<rect x="455.5" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>the: 90.9</title></rect>
+<rect x="468.0" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>angles: 97.7</title></rect>
+<rect x="480.5" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>:: 97.1</title></rect>
+<rect x="493.0" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>the: 99.5</title></rect>
+<rect x="505.5" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>line: 96.8</title></rect>
+<rect x="518.0" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>is: 95.8</title></rect>
+<rect x="530.5" y="8.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>perpendicular: 91.6</title></rect>
+<rect x="543.0" y="8.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>to: 95.0</title></rect>
+<rect x="561.5" y="8.0" width="13" height="15" rx="1.5" fill="#1c5cab"></rect>
+<text x="578.5" y="19.0" class="fig1-heat-val">100</text>
+<g class="fig1-a fig1-a-svg"><circle cx="8" cy="15.5" r="6.5"></circle><text x="8" y="18.5" text-anchor="middle">A</text></g>
+<text x="160" y="35.5" class="fig1-heat-unit" text-anchor="end">lines and bands</text>
+<rect x="168.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="24.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>line: 82.0</title></rect>
+<rect x="255.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>connecting: 0</title></rect>
+<rect x="268.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="280.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>points: 0</title></rect>
+<rect x="293.0" y="24.5" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>of: 61.0</title></rect>
+<rect x="305.5" y="24.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>tang: 73.0</title></rect>
+<rect x="318.0" y="24.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>ency: 88.2</title></rect>
+<rect x="330.5" y="24.5" width="11" height="15" rx="1.5" fill="#1c5cab"><title>is: 97.0</title></rect>
+<rect x="343.0" y="24.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>tangent: 90.7</title></rect>
+<rect x="355.5" y="24.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>to: 89.0</title></rect>
+<rect x="368.0" y="24.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>both: 83.2</title></rect>
+<rect x="380.5" y="24.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>circles: 19.5</title></rect>
+<rect x="393.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>gives: 0</title></rect>
+<rect x="405.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>us: 0</title></rect>
+<rect x="418.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>a: 0</title></rect>
+<rect x="430.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>condition: 0</title></rect>
+<rect x="443.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>on: 0</title></rect>
+<rect x="455.5" y="24.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>the: 12.0</title></rect>
+<rect x="468.0" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>angles: 0</title></rect>
+<rect x="480.5" y="24.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>:: 0</title></rect>
+<rect x="493.0" y="24.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>the: 24.0</title></rect>
+<rect x="505.5" y="24.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>line: 88.8</title></rect>
+<rect x="518.0" y="24.5" width="11" height="15" rx="1.5" fill="#1c5cab"><title>is: 94.4</title></rect>
+<rect x="530.5" y="24.5" width="11" height="15" rx="1.5" fill="#1c5cab"><title>perpendicular: 93.0</title></rect>
+<rect x="543.0" y="24.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>to: 92.2</title></rect>
+<rect x="561.5" y="24.5" width="13" height="15" rx="1.5" fill="#1c5cab"></rect>
+<text x="578.5" y="35.5" class="fig1-heat-val">97</text>
+<text x="160" y="52.0" class="fig1-heat-unit" text-anchor="end">coordinate system</text>
+<rect x="168.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="255.5" y="41.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>connecting: 93.4</title></rect>
+<rect x="268.0" y="41.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>the: 89.0</title></rect>
+<rect x="280.5" y="41.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>points: 95.1</title></rect>
+<rect x="293.0" y="41.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>of: 70.6</title></rect>
+<rect x="305.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tang: 0</title></rect>
+<rect x="318.0" y="41.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>ency: 75.2</title></rect>
+<rect x="330.5" y="41.0" width="11" height="15" rx="1.5" fill="#cde2fb"><title>is: 40.0</title></rect>
+<rect x="343.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tangent: 0</title></rect>
+<rect x="355.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="368.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>both: 0</title></rect>
+<rect x="380.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="393.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>gives: 0</title></rect>
+<rect x="405.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>us: 0</title></rect>
+<rect x="418.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>a: 0</title></rect>
+<rect x="430.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>condition: 0</title></rect>
+<rect x="443.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>on: 0</title></rect>
+<rect x="455.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="468.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>angles: 0</title></rect>
+<rect x="480.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>:: 0</title></rect>
+<rect x="493.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="505.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="518.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="530.5" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>perpendicular: 0</title></rect>
+<rect x="543.0" y="41.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="561.5" y="41.0" width="13" height="15" rx="1.5" fill="#1c5cab"></rect>
+<text x="578.5" y="52.0" class="fig1-heat-val">95</text>
+<text x="160" y="68.5" class="fig1-heat-unit" text-anchor="end">match or matching</text>
+<rect x="168.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="255.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>connecting: 0</title></rect>
+<rect x="268.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="280.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>points: 0</title></rect>
+<rect x="293.0" y="57.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>of: 28.0</title></rect>
+<rect x="305.5" y="57.5" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>tang: 69.0</title></rect>
+<rect x="318.0" y="57.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>ency: 44.0</title></rect>
+<rect x="330.5" y="57.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>is: 91.6</title></rect>
+<rect x="343.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tangent: 0</title></rect>
+<rect x="355.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="368.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>both: 0</title></rect>
+<rect x="380.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="393.0" y="57.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>gives: 84.8</title></rect>
+<rect x="405.5" y="57.5" width="11" height="15" rx="1.5" fill="#1c5cab"><title>us: 94.2</title></rect>
+<rect x="418.0" y="57.5" width="11" height="15" rx="1.5" fill="#1c5cab"><title>a: 93.8</title></rect>
+<rect x="430.5" y="57.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>condition: 26.0</title></rect>
+<rect x="443.0" y="57.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>on: 47.0</title></rect>
+<rect x="455.5" y="57.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>the: 41.0</title></rect>
+<rect x="468.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>angles: 0</title></rect>
+<rect x="480.5" y="57.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>:: 39.0</title></rect>
+<rect x="493.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="505.5" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="518.0" y="57.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>is: 91.4</title></rect>
+<rect x="530.5" y="57.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>perpendicular: 12.5</title></rect>
+<rect x="543.0" y="57.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="561.5" y="57.5" width="13" height="15" rx="1.5" fill="#1c5cab"></rect>
+<text x="578.5" y="68.5" class="fig1-heat-val">94</text>
+<text x="160" y="85.0" class="fig1-heat-unit" text-anchor="end">acceleration, braking, an…</text>
+<rect x="168.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="74.0" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>The: 65.0</title></rect>
+<rect x="205.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="255.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>connecting: 0</title></rect>
+<rect x="268.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="280.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>points: 0</title></rect>
+<rect x="293.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>of: 0</title></rect>
+<rect x="305.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tang: 0</title></rect>
+<rect x="318.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>ency: 0</title></rect>
+<rect x="330.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="343.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tangent: 0</title></rect>
+<rect x="355.5" y="74.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>to: 83.8</title></rect>
+<rect x="368.0" y="74.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>both: 85.0</title></rect>
+<rect x="380.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="393.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>gives: 0</title></rect>
+<rect x="405.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>us: 0</title></rect>
+<rect x="418.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>a: 0</title></rect>
+<rect x="430.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>condition: 0</title></rect>
+<rect x="443.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>on: 0</title></rect>
+<rect x="455.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="468.0" y="74.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>angles: 73.0</title></rect>
+<rect x="480.5" y="74.0" width="11" height="15" rx="1.5" fill="#cde2fb"><title>:: 25.0</title></rect>
+<rect x="493.0" y="74.0" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>the: 66.0</title></rect>
+<rect x="505.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="518.0" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="530.5" y="74.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>perpendicular: 0</title></rect>
+<rect x="543.0" y="74.0" width="11" height="15" rx="1.5" fill="#1c5cab"><title>to: 93.8</title></rect>
+<rect x="561.5" y="74.0" width="13" height="15" rx="1.5" fill="#1c5cab"></rect>
+<text x="578.5" y="85.0" class="fig1-heat-val">94</text>
+<text x="160" y="101.5" class="fig1-heat-unit" text-anchor="end">mathematical equations an…</text>
+<rect x="168.0" y="90.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="90.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="90.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="90.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>that: 43.0</title></rect>
+<rect x="230.5" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>the: 20.0</title></rect>
+<rect x="243.0" y="90.5" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>line: 59.0</title></rect>
+<rect x="255.5" y="90.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>connecting: 82.0</title></rect>
+<rect x="268.0" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>the: 30.0</title></rect>
+<rect x="280.5" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>points: 35.0</title></rect>
+<rect x="293.0" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>of: 40.0</title></rect>
+<rect x="305.5" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>tang: 19.0</title></rect>
+<rect x="318.0" y="90.5" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>ency: 51.0</title></rect>
+<rect x="330.5" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>is: 47.0</title></rect>
+<rect x="343.0" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>tangent: 18.0</title></rect>
+<rect x="355.5" y="90.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>to: 70.0</title></rect>
+<rect x="368.0" y="90.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>both: 80.5</title></rect>
+<rect x="380.5" y="90.5" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>circles: 54.5</title></rect>
+<rect x="393.0" y="90.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>gives: 88.7</title></rect>
+<rect x="405.5" y="90.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>us: 89.3</title></rect>
+<rect x="418.0" y="90.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>a: 79.0</title></rect>
+<rect x="430.5" y="90.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>condition: 89.7</title></rect>
+<rect x="443.0" y="90.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>on: 92.3</title></rect>
+<rect x="455.5" y="90.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>the: 77.0</title></rect>
+<rect x="468.0" y="90.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>angles: 80.0</title></rect>
+<rect x="480.5" y="90.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>:: 89.7</title></rect>
+<rect x="493.0" y="90.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>the: 90.0</title></rect>
+<rect x="505.5" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>line: 37.5</title></rect>
+<rect x="518.0" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>is: 37.0</title></rect>
+<rect x="530.5" y="90.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>perpendicular: 11.0</title></rect>
+<rect x="543.0" y="90.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>to: 83.0</title></rect>
+<rect x="561.5" y="90.5" width="13" height="15" rx="1.5" fill="#3987e5"></rect>
+<text x="578.5" y="101.5" class="fig1-heat-val">92</text>
+<text x="160" y="118.0" class="fig1-heat-unit" text-anchor="end">regular expression matchi…</text>
+<rect x="168.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="255.5" y="107.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>connecting: 90.1</title></rect>
+<rect x="268.0" y="107.0" width="11" height="15" rx="1.5" fill="#cde2fb"><title>the: 42.0</title></rect>
+<rect x="280.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>points: 0</title></rect>
+<rect x="293.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>of: 0</title></rect>
+<rect x="305.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tang: 0</title></rect>
+<rect x="318.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>ency: 0</title></rect>
+<rect x="330.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="343.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tangent: 0</title></rect>
+<rect x="355.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="368.0" y="107.0" width="11" height="15" rx="1.5" fill="#cde2fb"><title>both: 40.0</title></rect>
+<rect x="380.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="393.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>gives: 0</title></rect>
+<rect x="405.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>us: 0</title></rect>
+<rect x="418.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>a: 0</title></rect>
+<rect x="430.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>condition: 0</title></rect>
+<rect x="443.0" y="107.0" width="11" height="15" rx="1.5" fill="#cde2fb"><title>on: 2.0</title></rect>
+<rect x="455.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="468.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>angles: 0</title></rect>
+<rect x="480.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>:: 0</title></rect>
+<rect x="493.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="505.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="518.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="530.5" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>perpendicular: 0</title></rect>
+<rect x="543.0" y="107.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="561.5" y="107.0" width="13" height="15" rx="1.5" fill="#3987e5"></rect>
+<text x="578.5" y="118.0" class="fig1-heat-val">90</text>
+<text x="160" y="134.5" class="fig1-heat-unit" text-anchor="end">solving algebraic equatio…</text>
+<rect x="168.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="255.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>connecting: 0</title></rect>
+<rect x="268.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="280.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>points: 0</title></rect>
+<rect x="293.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>of: 0</title></rect>
+<rect x="305.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tang: 0</title></rect>
+<rect x="318.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>ency: 0</title></rect>
+<rect x="330.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="343.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tangent: 0</title></rect>
+<rect x="355.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="368.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>both: 0</title></rect>
+<rect x="380.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="393.0" y="123.5" width="11" height="15" rx="1.5" fill="#9ec5f4"><title>gives: 54.0</title></rect>
+<rect x="405.5" y="123.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>us: 86.5</title></rect>
+<rect x="418.0" y="123.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>a: 90.0</title></rect>
+<rect x="430.5" y="123.5" width="11" height="15" rx="1.5" fill="#3987e5"><title>condition: 85.0</title></rect>
+<rect x="443.0" y="123.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>on: 80.2</title></rect>
+<rect x="455.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="468.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>angles: 0</title></rect>
+<rect x="480.5" y="123.5" width="11" height="15" rx="1.5" fill="#cde2fb"><title>:: 41.0</title></rect>
+<rect x="493.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="505.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="518.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="530.5" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>perpendicular: 0</title></rect>
+<rect x="543.0" y="123.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="561.5" y="123.5" width="13" height="15" rx="1.5" fill="#3987e5"></rect>
+<text x="578.5" y="134.5" class="fig1-heat-val">90</text>
+<text x="160" y="151.0" class="fig1-heat-unit" text-anchor="end">airline tickets and airpo…</text>
+<rect x="168.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="140.0" width="11" height="15" rx="1.5" fill="#3987e5"><title>line: 85.3</title></rect>
+<rect x="255.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>connecting: 0</title></rect>
+<rect x="268.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="280.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>points: 0</title></rect>
+<rect x="293.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>of: 0</title></rect>
+<rect x="305.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tang: 0</title></rect>
+<rect x="318.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>ency: 0</title></rect>
+<rect x="330.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="343.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tangent: 0</title></rect>
+<rect x="355.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="368.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>both: 0</title></rect>
+<rect x="380.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="393.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>gives: 0</title></rect>
+<rect x="405.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>us: 0</title></rect>
+<rect x="418.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>a: 0</title></rect>
+<rect x="430.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>condition: 0</title></rect>
+<rect x="443.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>on: 0</title></rect>
+<rect x="455.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="468.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>angles: 0</title></rect>
+<rect x="480.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>:: 0</title></rect>
+<rect x="493.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="505.5" y="140.0" width="11" height="15" rx="1.5" fill="#6da7ec"><title>line: 84.0</title></rect>
+<rect x="518.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="530.5" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>perpendicular: 0</title></rect>
+<rect x="543.0" y="140.0" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="561.5" y="140.0" width="13" height="15" rx="1.5" fill="#3987e5"></rect>
+<text x="578.5" y="151.0" class="fig1-heat-val">85</text>
+<text x="160" y="167.5" class="fig1-heat-unit" text-anchor="end">function arguments parame…</text>
+<rect x="168.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="180.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>.: 0</title></rect>
+<rect x="193.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>The: 0</title></rect>
+<rect x="205.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>fact: 0</title></rect>
+<rect x="218.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>that: 0</title></rect>
+<rect x="230.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="243.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="255.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>connecting: 0</title></rect>
+<rect x="268.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="280.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>points: 0</title></rect>
+<rect x="293.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>of: 0</title></rect>
+<rect x="305.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tang: 0</title></rect>
+<rect x="318.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>ency: 0</title></rect>
+<rect x="330.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="343.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>tangent: 0</title></rect>
+<rect x="355.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="368.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>both: 0</title></rect>
+<rect x="380.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>circles: 0</title></rect>
+<rect x="393.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>gives: 0</title></rect>
+<rect x="405.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>us: 0</title></rect>
+<rect x="418.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>a: 0</title></rect>
+<rect x="430.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>condition: 0</title></rect>
+<rect x="443.0" y="156.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>on: 82.0</title></rect>
+<rect x="455.5" y="156.5" width="11" height="15" rx="1.5" fill="#6da7ec"><title>the: 77.7</title></rect>
+<rect x="468.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>angles: 0</title></rect>
+<rect x="480.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>:: 0</title></rect>
+<rect x="493.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>the: 0</title></rect>
+<rect x="505.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>line: 0</title></rect>
+<rect x="518.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>is: 0</title></rect>
+<rect x="530.5" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>perpendicular: 0</title></rect>
+<rect x="543.0" y="156.5" width="11" height="15" rx="1.5" fill="#eef0f2"><title>to: 0</title></rect>
+<rect x="561.5" y="156.5" width="13" height="15" rx="1.5" fill="#6da7ec"></rect>
+<text x="578.5" y="167.5" class="fig1-heat-val">82</text>
+<text x="173.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 173.5 179.0)" text-anchor="end">circles</text>
+<text x="186.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 186.0 179.0)" text-anchor="end">.</text>
+<text x="198.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 198.5 179.0)" text-anchor="end">The</text>
+<text x="211.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 211.0 179.0)" text-anchor="end">fact</text>
+<text x="223.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 223.5 179.0)" text-anchor="end">that</text>
+<text x="236.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 236.0 179.0)" text-anchor="end">the</text>
+<text x="248.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 248.5 179.0)" text-anchor="end">line</text>
+<text x="261.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 261.0 179.0)" text-anchor="end">connecting</text>
+<text x="273.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 273.5 179.0)" text-anchor="end">the</text>
+<text x="286.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 286.0 179.0)" text-anchor="end">points</text>
+<text x="298.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 298.5 179.0)" text-anchor="end">of</text>
+<text x="311.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 311.0 179.0)" text-anchor="end">tang</text>
+<text x="323.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 323.5 179.0)" text-anchor="end">ency</text>
+<text x="336.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 336.0 179.0)" text-anchor="end">is</text>
+<text x="348.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 348.5 179.0)" text-anchor="end">tangent</text>
+<text x="361.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 361.0 179.0)" text-anchor="end">to</text>
+<text x="373.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 373.5 179.0)" text-anchor="end">both</text>
+<text x="386.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 386.0 179.0)" text-anchor="end">circles</text>
+<text x="398.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 398.5 179.0)" text-anchor="end">gives</text>
+<text x="411.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 411.0 179.0)" text-anchor="end">us</text>
+<text x="423.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 423.5 179.0)" text-anchor="end">a</text>
+<text x="436.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 436.0 179.0)" text-anchor="end">condition</text>
+<text x="448.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 448.5 179.0)" text-anchor="end">on</text>
+<text x="461.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 461.0 179.0)" text-anchor="end">the</text>
+<text x="473.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 473.5 179.0)" text-anchor="end">angles</text>
+<text x="486.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 486.0 179.0)" text-anchor="end">:</text>
+<text x="498.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 498.5 179.0)" text-anchor="end">the</text>
+<text x="511.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 511.0 179.0)" text-anchor="end">line</text>
+<text x="523.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 523.5 179.0)" text-anchor="end">is</text>
+<text x="536.0" y="179.0" class="fig1-heat-tok" transform="rotate(-60 536.0 179.0)" text-anchor="end">perpendicular</text>
+<text x="548.5" y="179.0" class="fig1-heat-tok" transform="rotate(-60 548.5 179.0)" text-anchor="end">to</text>
+<text x="568.0" y="185.0" class="fig1-heat-tok" text-anchor="middle">max</text>
+</svg></div>
+              <p class="fig1-note fig1-center">segment 2, real Gemma tokens; darker = higher percentile; the right column is the maximum over the segment</p>
+              </div><div class="fig1-split-side"><ul class="fig1-facts"><li>Each segment runs through <b>Gemma-3-4B</b> on its own; non-first segments get a &lt;BOS&gt;, whose activation is dropped</li><li><b>Gemma Scope 2</b> SAE on layer 22 gives <b>65,536</b> latents per token, max-pooled over the segment</li></ul>
               <div class="fig1-funnel" aria-label="Building the conditioning vocabulary">
                 <div style="width:100%"><b>65,536</b> SAE latents</div>
                 <div style="width:86%"><b>16,261</b> kept by frequency and quality</div>
                 <div style="width:72%">two-stage clustering, then coverage selection</div>
                 <div style="width:58%" class="is-final"><b>844 units</b> · 7,208 latents</div>
               </div>
-              <p class="fig1-note fig1-center">quality judged by GPT-5.6 Luna from Neuronpedia descriptions; each unit keeps a natural-language description; a unit is active when any member is</p>
+              <p class="fig1-note fig1-center">quality judged by GPT-5.6 Luna from Neuronpedia descriptions; each unit keeps a natural-language description; a unit is active when any member is</p></div></div>
             </section>
             <section class="fig1-card" data-step="4">
               <h4><span class="fig1-num">4</span>Sign and select</h4>
-              <p class="fig1-note">the top-k by activation, k ≈ 12 → +</p>
-              <ul class="fig1-feats">
-                <li class="pos a-row"><span class="fig1-sign">+</span><span>geometry and triangles</span><code>f233</code><span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span></li>
-                <li class="pos"><span class="fig1-sign">+</span><span>mathematical equations</span><code>f395</code></li>
-                <li class="fig1-more" aria-hidden="true">⋯</li>
-              </ul>
-              <p class="fig1-note">inactive, or should have fired, → −</p>
-              <ul class="fig1-feats">
-                <li class="neg"><span class="fig1-sign">−</span><span>baseball and cricket terms</span><code>f563</code></li>
-                <li class="neg"><span class="fig1-sign">−</span><span>JavaScript React code</span><code>f1537</code></li>
-              </ul>
-              <p class="fig1-signal">= the conditioning signal</p>
-              <ul class="fig1-facts"><li>Activations become <b>per-unit percentiles</b>, so units with different scales compare fairly</li><li><b>+</b> the k<sup>+</sup> most active units</li><li><b>&minus;</b> not spliced: k<sup>&minus;</sup> inactive units at random; spliced: the k<sup>&minus;</sup> units that <i>should</i> have fired (counterfactual minus actual)</li><li>k<sup>+</sup> &isin; 1&ndash;48 and k<sup>&minus;</sup> &isin; 0&ndash;48 from a truncated geometric draw (mean 12), so no fixed count is baked in; all other units are omitted</li></ul>
+              <div class="fig1-select">
+                <div>
+                  <p class="fig1-note">the k<sup>+</sup> most active units, by percentile (here k<sup>+</sup> = 12 of 43 active) &rarr; +</p>
+                  <ul class="fig1-feats"><li class="pos a-row"><span class="fig1-sign">+</span><span class="fig1-feat-name">geometry and triangles</span><span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span><span class="fig1-pct"><i style="width:100%"></i></span><code>f233</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">lines and bands</span><span class="fig1-pct"><i style="width:97%"></i></span><code>f6928</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">coordinate system</span><span class="fig1-pct"><i style="width:95%"></i></span><code>f4265</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">match or matching</span><span class="fig1-pct"><i style="width:94%"></i></span><code>f25044</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">acceleration, braking, and turning</span><span class="fig1-pct"><i style="width:94%"></i></span><code>f22864</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">mathematical equations and algebraic expressions</span><span class="fig1-pct"><i style="width:92%"></i></span><code>f395</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">regular expression matching</span><span class="fig1-pct"><i style="width:90%"></i></span><code>f627</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">solving algebraic equations</span><span class="fig1-pct"><i style="width:90%"></i></span><code>f4397</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">airline tickets and airports</span><span class="fig1-pct"><i style="width:85%"></i></span><code>f2693</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">function arguments parameters</span><span class="fig1-pct"><i style="width:82%"></i></span><code>f1564</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">potential negative consequences</span><span class="fig1-pct"><i style="width:79%"></i></span><code>f284</code></li><li class="pos"><span class="fig1-sign">+</span><span class="fig1-feat-name">introductions to explanations</span><span class="fig1-pct"><i style="width:76%"></i></span><code>f600</code></li></ul>
+                </div>
+                <div>
+                  <p class="fig1-note">inactive units (here 6 of 801) &rarr; &minus;</p>
+                  <ul class="fig1-feats"><li class="neg"><span class="fig1-sign">&minus;</span><span class="fig1-feat-name">baseball and cricket terms</span><code>f563</code></li><li class="neg"><span class="fig1-sign">&minus;</span><span class="fig1-feat-name">JavaScript React code</span><code>f1537</code></li><li class="neg"><span class="fig1-sign">&minus;</span><span class="fig1-feat-name">hormone production and imbalances</span><code>f13176</code></li><li class="neg"><span class="fig1-sign">&minus;</span><span class="fig1-feat-name">online shopping deals</span><code>f4839</code></li><li class="neg"><span class="fig1-sign">&minus;</span><span class="fig1-feat-name">victory or defeat</span><code>f153</code></li><li class="neg"><span class="fig1-sign">&minus;</span><span class="fig1-feat-name">nuclear, uranium, radioactive, fusion</span><code>f6844</code></li></ul>
+                  <p class="fig1-omit">31 other active and 795 other inactive units are omitted</p>
+                </div>
+              </div>
+              <p class="fig1-signal">= the conditioning signal for segment 2</p>
+              <ul class="fig1-facts"><li>Activations become <b>per-unit percentiles</b>, so units with different scales compare fairly</li><li>Negative units: after an unspliced boundary, k<sup>&minus;</sup> inactive units at random; after a spliced one, the units that <i>should</i> have fired (counterfactual minus actual)</li><li>k<sup>+</sup> &isin; 1&ndash;48 and k<sup>&minus;</sup> &isin; 0&ndash;48 from a truncated geometric draw (mean 12), so no fixed count is baked in; all other units are omitted</li></ul>
             </section>
           </div>
           <section class="fig1-card fig1-wide" data-step="5">
             <h4><span class="fig1-num">5</span>Conditional pretraining</h4>
+            <div class="fig1-encin" aria-label="Encoder input: one signal per segment, 12 positive and 6 negative feature tokens each in this example"><span class="fig1-encin-lab">encoder input</span><span class="fig1-encin-seg s1"><b>f<sub>1</sub></b><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i></span><span class="fig1-encin-seg s2"><b>f<sub>2</sub></b><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i></span><span class="fig1-encin-seg s3"><b>f<sub>3</sub></b><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i></span><span class="fig1-encin-key"><i class="p"></i> positive <i class="n"></i> negative feature token</span></div>
             <svg class="fig1-arch" viewBox="0 0 760 150" role="img" aria-label="The conditioning signal enters the encoder (control channel); the decoder (text stream) reads it through one-way cross-attention, with no path back, and predicts the next token and the next segment's features">
               <defs>
                 <marker id="f1-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10Z" fill="#52514e"></path></marker>
@@ -216,6 +593,8 @@
               <rect x="180" y="318" width="150" height="30" rx="7" fill="#fff" stroke="#d6d9de"></rect>
               <text x="255" y="337" class="fig1-svg-out" text-anchor="middle">next-segment features</text>
             </svg>
+
+            <svg class="fig1-masks" viewBox="0 0 475 172" role="img" aria-label="Attention masks: the encoder attends within each segment's signal; decoder positions in segment j cross-attend only to that segment's signal; the decoder attends causally over the whole document"><rect x="55" y="15" width="29" height="4" rx="1" fill="#d9e6f8"></rect><rect x="85" y="15" width="29" height="4" rx="1" fill="#fbe7cc"></rect><rect x="115" y="15" width="19" height="4" rx="1" fill="#d4efe2"></rect><rect x="48" y="22" width="4" height="29" rx="1" fill="#d9e6f8"></rect><rect x="48" y="52" width="4" height="29" rx="1" fill="#fbe7cc"></rect><rect x="48" y="82" width="4" height="19" rx="1" fill="#d4efe2"></rect><rect x="55" y="22" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="65" y="22" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="75" y="22" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="85" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="95" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="105" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="115" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="125" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="55" y="32" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="65" y="32" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="75" y="32" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="85" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="95" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="105" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="115" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="125" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="55" y="42" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="65" y="42" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="75" y="42" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="85" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="95" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="105" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="115" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="125" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="55" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="65" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="75" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="85" y="52" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="95" y="52" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="105" y="52" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="115" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="125" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="55" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="65" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="75" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="85" y="62" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="95" y="62" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="105" y="62" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="115" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="125" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="55" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="65" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="75" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="85" y="72" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="95" y="72" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="105" y="72" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="115" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="125" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="55" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="65" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="75" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="85" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="95" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="105" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="115" y="82" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="125" y="82" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="55" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="65" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="75" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="85" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="95" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="105" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="115" y="92" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><rect x="125" y="92" width="9" height="9" rx="1.5" fill="#86b6ef"></rect><text x="95.0" y="140" class="fig1-svg-label" text-anchor="middle">encoder self-attention</text><text x="95.0" y="155" class="fig1-svg-note" text-anchor="middle">within a segment</text><rect x="205" y="15" width="29" height="4" rx="1" fill="#d9e6f8"></rect><rect x="235" y="15" width="29" height="4" rx="1" fill="#fbe7cc"></rect><rect x="265" y="15" width="19" height="4" rx="1" fill="#d4efe2"></rect><rect x="198" y="22" width="4" height="39" rx="1" fill="#d9e6f8"></rect><rect x="198" y="62" width="4" height="39" rx="1" fill="#fbe7cc"></rect><rect x="198" y="102" width="4" height="19" rx="1" fill="#d4efe2"></rect><rect x="205" y="22" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="215" y="22" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="225" y="22" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="235" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="245" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="255" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="265" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="32" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="215" y="32" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="225" y="32" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="235" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="245" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="255" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="265" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="42" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="215" y="42" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="225" y="42" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="235" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="245" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="255" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="265" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="52" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="215" y="52" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="225" y="52" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="235" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="245" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="255" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="265" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="215" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="225" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="235" y="62" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="245" y="62" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="255" y="62" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="265" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="215" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="225" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="235" y="72" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="245" y="72" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="255" y="72" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="265" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="215" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="225" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="235" y="82" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="245" y="82" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="255" y="82" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="265" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="215" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="225" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="235" y="92" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="245" y="92" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="255" y="92" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="265" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="275" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="205" y="102" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="215" y="102" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="225" y="102" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="235" y="102" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="245" y="102" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="255" y="102" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="265" y="102" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="275" y="102" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="205" y="112" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="215" y="112" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="225" y="112" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="235" y="112" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="245" y="112" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="255" y="112" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="265" y="112" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><rect x="275" y="112" width="9" height="9" rx="1.5" fill="#2a78d6"></rect><text x="245.0" y="140" class="fig1-svg-label" text-anchor="middle">cross-attention</text><text x="245.0" y="155" class="fig1-svg-note" text-anchor="middle">own segment only</text><rect x="345" y="15" width="39" height="4" rx="1" fill="#d9e6f8"></rect><rect x="385" y="15" width="39" height="4" rx="1" fill="#fbe7cc"></rect><rect x="425" y="15" width="19" height="4" rx="1" fill="#d4efe2"></rect><rect x="338" y="22" width="4" height="39" rx="1" fill="#d9e6f8"></rect><rect x="338" y="62" width="4" height="39" rx="1" fill="#fbe7cc"></rect><rect x="338" y="102" width="4" height="19" rx="1" fill="#d4efe2"></rect><rect x="345" y="22" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="365" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="375" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="385" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="395" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="405" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="415" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="425" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="22" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="32" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="32" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="375" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="385" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="395" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="405" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="415" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="425" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="32" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="42" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="42" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="42" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="385" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="395" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="405" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="415" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="425" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="42" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="52" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="52" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="52" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="52" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="385" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="395" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="405" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="415" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="425" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="52" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="62" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="62" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="62" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="62" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="385" y="62" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="395" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="405" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="415" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="425" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="62" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="72" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="72" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="72" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="72" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="385" y="72" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="395" y="72" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="405" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="415" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="425" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="72" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="82" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="82" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="82" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="82" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="385" y="82" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="395" y="82" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="405" y="82" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="415" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="425" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="82" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="385" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="395" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="405" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="415" y="92" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="425" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="435" y="92" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="385" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="395" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="405" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="415" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="425" y="102" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="435" y="102" width="9" height="9" rx="1.5" fill="#f1f2f4"></rect><rect x="345" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="355" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="365" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="375" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="385" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="395" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="405" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="415" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="425" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><rect x="435" y="112" width="9" height="9" rx="1.5" fill="#b9bfc8"></rect><text x="395.0" y="140" class="fig1-svg-label" text-anchor="middle">decoder self-attention</text><text x="395.0" y="155" class="fig1-svg-note" text-anchor="middle">causal, whole document</text></svg>
             <ul class="fig1-facts fig1-facts-grid">
               <li>Encoder-decoder transformer: <b>27 + 27 layers</b>, width 1,664, <b>2.99B</b> parameters</li>
               <li>One embedding per unit; negative units add a learned <b>negative embedding</b>, like a positional embedding</li>
@@ -225,6 +604,10 @@
           </section>
           <section class="fig1-card fig1-wide fig1-post" data-step="6">
             <h4><span class="fig1-num">6</span>Post-training</h4>
+            <div class="fig1-chat" aria-label="A conversation cut into segments of at most 32 Gemma tokens within each turn">
+              <div class="chat-turn"><span class="chat-role">user</span><span class="seg s1" style="flex:32">32</span><span class="seg s2" style="flex:19">19</span></div>
+              <div class="chat-turn"><span class="chat-role">assistant</span><span class="seg s1" style="flex:32">32</span><span class="seg s2" style="flex:32">32</span><span class="seg s3" style="flex:32">32</span><span class="seg s4" style="flex:11">11</span><span class="chat-steer">+ steered</span></div>
+            </div>
             <ul class="fig1-facts fig1-facts-grid">
               <li>Supervised finetuning on <b>396M tokens</b>: SmolTalk, the MMLU and GSM8K training sets, and Nanochat spelling and identity data</li>
               <li><b>+ 140M tokens</b> of steered synthetic conversations, with responses steered in random directions</li>

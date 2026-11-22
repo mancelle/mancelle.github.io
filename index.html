@@ -106,6 +106,7 @@
             <section class="fig1-card" data-step="1">
               <h4><span class="fig1-num">1</span>Segment</h4>
               <p class="fig1-doc"><span class="seg s1">… parameterizing the points on the</span> <span class="seg s2">circles. The fact that the line connecting the points of tangency is <u class="a-phrase">tangent to both circles</u> <span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span> gives us a condition on the angles: the line is perpendicular to</span> <span class="seg s3">the radii at the points of tangency.</span></p>
+              <ul class="fig1-facts"><li>FineWeb-Edu documents, cut into segments of <b>128 Gemma-3 tokens</b> (about 256 tokens for our tokenizer)</li><li>Short tail segments are kept: a 280-token document becomes <b>128 + 128 + 24</b></li></ul>
             </section>
             <section class="fig1-card" data-step="2">
               <h4><span class="fig1-num">2</span>Splice</h4>
@@ -114,6 +115,7 @@
               <div class="fig1-down" aria-hidden="true">↓</div>
               <div class="fig1-chips"><span class="seg s1">seg 1</span><span class="seg s2">seg 2</span><span class="seg s0">other</span></div>
               <p class="fig1-note">swapped for another document, prob. 0.15</p>
+              <ul class="fig1-facts"><li><b>15%</b> of segment boundaries are spliced: the continuations at those cuts are shuffled among them</li><li>The segment that originally followed is kept as the <b>counterfactual</b> (used in step 4)</li><li>Documents that grow past the <b>2,048-token</b> context are cut; the trailing segments become new documents</li></ul>
             </section>
             <section class="fig1-card" data-step="3">
               <h4><span class="fig1-num">3</span>Extract features</h4>
@@ -126,6 +128,14 @@
                 <g class="fig1-a fig1-a-svg" tabindex="0"><circle cx="96.5" cy="170" r="7"></circle><text x="96.5" y="173.5" text-anchor="middle">A</text></g>
               </svg>
               <p class="fig1-note fig1-center">one vector per segment</p>
+              <ul class="fig1-facts"><li>Each segment runs through <b>Gemma-3-4B</b> on its own; non-first segments get a &lt;BOS&gt;, whose activation is dropped</li><li><b>Gemma Scope 2</b> SAE on layer 22 gives <b>65,536</b> latents per token, max-pooled over the segment</li></ul>
+              <div class="fig1-funnel" aria-label="Building the conditioning vocabulary">
+                <div style="width:100%"><b>65,536</b> SAE latents</div>
+                <div style="width:86%"><b>16,261</b> kept by frequency and quality</div>
+                <div style="width:72%">two-stage clustering, then coverage selection</div>
+                <div style="width:58%" class="is-final"><b>844 units</b> · 7,208 latents</div>
+              </div>
+              <p class="fig1-note fig1-center">quality judged by GPT-5.6 Luna from Neuronpedia descriptions; each unit keeps a natural-language description; a unit is active when any member is</p>
             </section>
             <section class="fig1-card" data-step="4">
               <h4><span class="fig1-num">4</span>Sign and select</h4>
@@ -141,6 +151,7 @@
                 <li class="neg"><span class="fig1-sign">−</span><span>JavaScript React code</span><code>f1537</code></li>
               </ul>
               <p class="fig1-signal">= the conditioning signal</p>
+              <ul class="fig1-facts"><li>Activations become <b>per-unit percentiles</b>, so units with different scales compare fairly</li><li><b>+</b> the k<sup>+</sup> most active units</li><li><b>&minus;</b> not spliced: k<sup>&minus;</sup> inactive units at random; spliced: the k<sup>&minus;</sup> units that <i>should</i> have fired (counterfactual minus actual)</li><li>k<sup>+</sup> &isin; 1&ndash;48 and k<sup>&minus;</sup> &isin; 0&ndash;48 from a truncated geometric draw (mean 12), so no fixed count is baked in; all other units are omitted</li></ul>
             </section>
           </div>
           <section class="fig1-card fig1-wide" data-step="5">
@@ -205,6 +216,20 @@
               <rect x="180" y="318" width="150" height="30" rx="7" fill="#fff" stroke="#d6d9de"></rect>
               <text x="255" y="337" class="fig1-svg-out" text-anchor="middle">next-segment features</text>
             </svg>
+            <ul class="fig1-facts fig1-facts-grid">
+              <li>Encoder-decoder transformer: <b>27 + 27 layers</b>, width 1,664, <b>2.99B</b> parameters</li>
+              <li>One embedding per unit; negative units add a learned <b>negative embedding</b>, like a positional embedding</li>
+              <li><b>Block-diagonal masks</b>: decoder positions in segment <i>j</i> cross-attend only to its signal, in every decoder layer; nothing flows back</li>
+              <li>Loss = next-token prediction <b>+ 0.1 &times;</b> next-segment feature prediction, from a head on the final decoder layer, max-pooled over the segment</li>
+            </ul>
+          </section>
+          <section class="fig1-card fig1-wide fig1-post" data-step="6">
+            <h4><span class="fig1-num">6</span>Post-training</h4>
+            <ul class="fig1-facts fig1-facts-grid">
+              <li>Supervised finetuning on <b>396M tokens</b>: SmolTalk, the MMLU and GSM8K training sets, and Nanochat spelling and identity data</li>
+              <li><b>+ 140M tokens</b> of steered synthetic conversations, with responses steered in random directions</li>
+              <li>Segments of <b>32 Gemma tokens</b> within each conversation turn; no splicing</li>
+            </ul>
           </section>
           </div>
           <div class="fig1-steer" hidden>
@@ -247,12 +272,19 @@
                 </g>
                 <g class="s-part" data-s="2">
                   <line x1="190" y1="290" x2="190" y2="246" stroke="#2a78d6" stroke-width="2" marker-end="url(#f1s-ah-blue)"></line>
-                  <text x="198" y="272" class="fig1-svg-blue">moved toward</text>
+                  <text x="198" y="272" class="fig1-svg-blue">interpolated toward</text>
                   <rect x="100" y="292" width="180" height="46" rx="9" fill="#eaf2fc" stroke="#2a78d6" stroke-width="1.6"></rect>
                   <text x="190" y="312" class="fig1-svg-label" text-anchor="middle">target concept</text>
                   <text x="190" y="329" class="fig1-svg-note" text-anchor="middle">Conditioning or NL Steering</text>
                 </g>
               </svg>
+              <ul class="fig1-facts fig1-facts-grid">
+                <li>Every segment, the head&rsquo;s <b>k<sup>+</sup> largest and k<sup>&minus;</sup> smallest</b> predictions become the next signal, with the same count distribution as in training</li>
+                <li>Steering <b>interpolates</b> between this signal and a target vector at every segment: strength 0 is fully self-conditioned, strength 6 gives static features set by the concept</li>
+                <li><b>Conditioning</b>: the target is a difference of means of max-pooled SAE percentile activations, positive vs negative examples of the concept</li>
+                <li><b>NL Steering</b>: a one-sentence description is matched to every unit&rsquo;s description, plus a learned rank-32 correction (cosine to fitted targets 0.03 &rarr; 0.41 on held-out concepts)</li>
+                <li>Attacks studied: black-box suffixes (<b>GEPA</b>, an <b>RL-trained attacker</b>) and white-box <b>soft prompts</b> (free, or mixtures of real tokens)</li>
+              </ul>
             </section>
           </div>
           <p class="fig1-caption" aria-live="polite"><span class="fig1-cap-step"></span><span class="fig1-cap-text"></span></p>

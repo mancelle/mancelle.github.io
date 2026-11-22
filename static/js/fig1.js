@@ -11,6 +11,7 @@
       "SAE activations are extracted independently for each segment and max-pooled over token positions; filtering, clustering and selection produce a curated vocabulary of conditioning features.",
       "Selected active and inactive conditioning features are encoded as positive and negative tokens, respectively; unselected features are omitted.",
       "A dedicated encoder processes these feature tokens and sends them to a decoder through cross-attention. Training combines next-token prediction with an auxiliary objective for predicting the next segment’s features.",
+      "Post-training for our models is supervised finetuning (SFT). Then, we generate 140M tokens of steered synthetic data based on SmolTalk to provide more diversity and examples of steering in a more natural, conversational context.",
     ],
     steer: [
       "At inference, we have the model self-condition so that it can autoregressively generate while still enabling this steering interface.",

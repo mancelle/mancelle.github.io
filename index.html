@@ -49,6 +49,7 @@
   <script defer src="static/js/fig_replies.js"></script>
   <script defer src="static/js/fig_plane.js"></script>
   <script defer src="static/js/fig_dumbbell.js"></script>
+  <script defer src="static/js/fig1.js"></script>
 </head>
 <body>
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
@@ -88,13 +89,25 @@
   <section class="hero teaser">
     <div class="container is-max-widescreen">
       <div class="hero-body" style="padding-top:0">
-        <figure class="fig1" aria-label="Overview of conditional pretraining: documents are segmented and spliced, sparse-autoencoder features are extracted per segment, signed and selected into the conditioning signal, and an encoder reads that signal while the decoder attends to it through one-way cross-attention to predict the next token and the next segment's features.">
+        <figure class="fig1" data-mode="pretrain" data-step="0" aria-label="How Mancelle works: conditional pretraining with a separate control channel, and steering at inference">
+          <div class="fig1-bar">
+            <div class="fig1-modes" role="tablist" aria-label="Show">
+              <button type="button" role="tab" data-mode="pretrain" class="is-active" aria-selected="true">Pretraining</button>
+              <button type="button" role="tab" data-mode="steer" aria-selected="false">Steering at inference</button>
+            </div>
+            <div class="fig1-nav">
+              <button type="button" class="fig1-prev" aria-label="Previous step">&#8249;</button>
+              <button type="button" class="fig1-play">&#9654; Walk me through it</button>
+              <button type="button" class="fig1-next" aria-label="Next step">&#8250;</button>
+            </div>
+          </div>
+          <div class="fig1-pre">
           <div class="fig1-steps">
-            <section class="fig1-card">
+            <section class="fig1-card" data-step="1">
               <h4><span class="fig1-num">1</span>Segment</h4>
-              <p class="fig1-doc"><span class="seg s1">… parameterizing the points on the</span> <span class="seg s2">circles. The fact that the line connecting the points of tangency is <u>tangent to both circles</u> <span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span> gives us a condition on the angles: the line is perpendicular to</span> <span class="seg s3">the radii at the points of tangency.</span></p>
+              <p class="fig1-doc"><span class="seg s1">… parameterizing the points on the</span> <span class="seg s2">circles. The fact that the line connecting the points of tangency is <u class="a-phrase">tangent to both circles</u> <span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span> gives us a condition on the angles: the line is perpendicular to</span> <span class="seg s3">the radii at the points of tangency.</span></p>
             </section>
-            <section class="fig1-card">
+            <section class="fig1-card" data-step="2">
               <h4><span class="fig1-num">2</span>Splice</h4>
               <div class="fig1-chips"><span class="seg s1">seg 1</span><span class="seg s2">seg 2</span><span class="seg s3">seg 3</span></div>
               <p class="fig1-note">kept, prob. 0.85</p>
@@ -102,23 +115,23 @@
               <div class="fig1-chips"><span class="seg s1">seg 1</span><span class="seg s2">seg 2</span><span class="seg s0">other</span></div>
               <p class="fig1-note">swapped for another document, prob. 0.15</p>
             </section>
-            <section class="fig1-card">
+            <section class="fig1-card" data-step="3">
               <h4><span class="fig1-num">3</span>Extract features</h4>
               <svg class="fig1-grid" viewBox="0 0 196 180" role="img" aria-label="Token-by-feature SAE activations, reduced by a max over tokens to one vector per segment">
                 <text x="104" y="10" class="fig1-svg-note" text-anchor="middle">SAE features →</text>
                 <text x="8" y="66" class="fig1-svg-note" text-anchor="middle" transform="rotate(-90 8 66)">tokens</text>
-                <g class="fig1-cells"><rect x="24" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="18" width="19" height="14" rx="2.5" fill="#cde2fb"></rect><rect x="108" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="34" width="19" height="14" rx="2.5" fill="#cde2fb"></rect><rect x="45" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="34" width="19" height="14" rx="2.5" fill="#86b6ef"></rect><rect x="129" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="50" width="19" height="14" rx="2.5" fill="#86b6ef" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="66" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="66" width="19" height="14" rx="2.5" fill="#86b6ef" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="87" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="66" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="129" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="82" width="19" height="14" rx="2.5" fill="#2a78d6" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="108" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="82" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="150" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="98" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="45" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="98" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="171" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect></g>
+                <g class="fig1-cells"><rect x="24" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="18" width="19" height="14" rx="2.5" fill="#cde2fb"></rect><rect x="108" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="18" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="34" width="19" height="14" rx="2.5" fill="#cde2fb"></rect><rect x="45" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="34" width="19" height="14" rx="2.5" fill="#86b6ef"></rect><rect x="129" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="34" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="50" width="19" height="14" rx="2.5" fill="#86b6ef" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="66" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="50" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="66" width="19" height="14" rx="2.5" fill="#86b6ef" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="87" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="66" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="129" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="66" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="45" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect class="a-cell" x="87" y="82" width="19" height="14" rx="2.5" fill="#2a78d6" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="108" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="82" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="150" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="171" y="82" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="24" y="98" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="45" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="66" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="87" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="108" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="129" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect><rect x="150" y="98" width="19" height="14" rx="2.5" fill="#cde2fb" stroke="#2a78d6" stroke-width="1.3"></rect><rect x="171" y="98" width="19" height="14" rx="2.5" fill="#eef0f2"></rect></g>
                 <text x="104" y="134" class="fig1-svg-note" text-anchor="middle">max over tokens ↓</text>
-                <g class="fig1-vec"><rect x="24" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="45" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect x="66" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect x="87" y="142" width="19" height="16" rx="2.5" fill="#2a78d6"></rect><rect x="108" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect x="129" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="150" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="171" y="142" width="19" height="16" rx="2.5" fill="#eef0f2"></rect></g>
+                <g class="fig1-vec"><rect x="24" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="45" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect x="66" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect class="a-cell" x="87" y="142" width="19" height="16" rx="2.5" fill="#2a78d6"></rect><rect x="108" y="142" width="19" height="16" rx="2.5" fill="#86b6ef"></rect><rect x="129" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="150" y="142" width="19" height="16" rx="2.5" fill="#cde2fb"></rect><rect x="171" y="142" width="19" height="16" rx="2.5" fill="#eef0f2"></rect></g>
                 <g class="fig1-a fig1-a-svg" tabindex="0"><circle cx="96.5" cy="170" r="7"></circle><text x="96.5" y="173.5" text-anchor="middle">A</text></g>
               </svg>
               <p class="fig1-note fig1-center">one vector per segment</p>
             </section>
-            <section class="fig1-card">
+            <section class="fig1-card" data-step="4">
               <h4><span class="fig1-num">4</span>Sign and select</h4>
               <p class="fig1-note">the top-k by activation, k ≈ 12 → +</p>
               <ul class="fig1-feats">
-                <li class="pos"><span class="fig1-sign">+</span><span>geometry and triangles</span><code>f233</code><span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span></li>
+                <li class="pos a-row"><span class="fig1-sign">+</span><span>geometry and triangles</span><code>f233</code><span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span></li>
                 <li class="pos"><span class="fig1-sign">+</span><span>mathematical equations</span><code>f395</code></li>
                 <li class="fig1-more" aria-hidden="true">⋯</li>
               </ul>
@@ -130,7 +143,7 @@
               <p class="fig1-signal">= the conditioning signal</p>
             </section>
           </div>
-          <section class="fig1-card fig1-wide">
+          <section class="fig1-card fig1-wide" data-step="5">
             <h4><span class="fig1-num">5</span>Conditional pretraining</h4>
             <svg class="fig1-arch" viewBox="0 0 760 150" role="img" aria-label="The conditioning signal enters the encoder (control channel); the decoder (text stream) reads it through one-way cross-attention, with no path back, and predicts the next token and the next segment's features">
               <defs>
@@ -140,12 +153,12 @@
               </defs>
               <!-- conditioning signal from step 4 -->
               <text x="130" y="14" class="fig1-svg-blue" text-anchor="middle">the conditioning signal</text>
-              <line x1="130" y1="20" x2="130" y2="56" stroke="#2a78d6" stroke-width="2" marker-end="url(#f1-ah-blue)"></line>
+              <line class="f1-flow" x1="130" y1="20" x2="130" y2="56" stroke="#2a78d6" stroke-width="2" marker-end="url(#f1-ah-blue)"></line>
               <rect x="40" y="60" width="180" height="62" rx="10" fill="#fff" stroke="#2a78d6" stroke-width="2"></rect>
               <text x="130" y="88" class="fig1-svg-title" text-anchor="middle">Encoder</text>
               <text x="130" y="108" class="fig1-svg-note" text-anchor="middle">control channel</text>
               <!-- one-way cross-attention -->
-              <line x1="222" y1="80" x2="356" y2="80" stroke="#52514e" stroke-width="2" marker-end="url(#f1-ah)"></line>
+              <line class="f1-flow" x1="222" y1="80" x2="356" y2="80" stroke="#52514e" stroke-width="2" marker-end="url(#f1-ah)"></line>
               <text x="289" y="72" class="fig1-svg-label" text-anchor="middle">cross-attention</text>
               <line x1="356" y1="104" x2="224" y2="104" stroke="#d64545" stroke-width="1.6" stroke-dasharray="6 4" marker-end="url(#f1-ah-red)"></line>
               <path d="M283,98l12,12M295,98l-12,12" stroke="#d64545" stroke-width="2.4"></path>
@@ -193,6 +206,56 @@
               <text x="255" y="337" class="fig1-svg-out" text-anchor="middle">next-segment features</text>
             </svg>
           </section>
+          </div>
+          <div class="fig1-steer" hidden>
+            <section class="fig1-card fig1-wide fig1-steer-card">
+              <svg class="fig1-steer-svg" viewBox="0 0 440 345" role="img" aria-label="At inference the decoder reads the input text, its feature-prediction head proposes the next segment's features, steering pulls them toward a target concept, and the result conditions the encoder; the input text, which an adversary may control, also supplies the prompt's own SAE features">
+                <defs>
+                  <marker id="f1s-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10Z" fill="#52514e"></path></marker>
+                  <marker id="f1s-ah-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10Z" fill="#2a78d6"></path></marker>
+                  <marker id="f1s-ah-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10Z" fill="#d64545"></path></marker>
+                </defs>
+                <g class="s-part" data-s="3">
+                  <text x="345" y="13" class="fig1-svg-red" text-anchor="middle">may be controlled by an adversary</text>
+                  <rect x="270" y="20" width="150" height="34" rx="8" fill="#fff" stroke="#d64545" stroke-width="1.6"></rect>
+                  <text x="345" y="42" class="fig1-svg-out" text-anchor="middle">input text</text>
+                  <line x1="345" y1="56" x2="345" y2="106" stroke="#52514e" stroke-width="1.6" marker-end="url(#f1s-ah)"></line>
+                  <polyline points="268,37 95,37 95,106" fill="none" stroke="#52514e" stroke-width="1.4" stroke-dasharray="3 3" marker-end="url(#f1s-ah)"></polyline>
+                  <text x="182" y="31" class="fig1-svg-note" text-anchor="middle">SAE features of the prompt</text>
+                </g>
+                <g class="s-core">
+                  <rect x="20" y="108" width="150" height="58" rx="10" fill="#fff" stroke="#2a78d6" stroke-width="2"></rect>
+                  <text x="95" y="134" class="fig1-svg-title" text-anchor="middle">Encoder</text>
+                  <text x="95" y="153" class="fig1-svg-note" text-anchor="middle">control channel</text>
+                  <rect x="270" y="108" width="150" height="58" rx="10" fill="#fff" stroke="#c3c2b7" stroke-width="1.5"></rect>
+                  <text x="345" y="134" class="fig1-svg-title" text-anchor="middle">Decoder</text>
+                  <text x="345" y="153" class="fig1-svg-note" text-anchor="middle">text stream</text>
+                  <line x1="172" y1="126" x2="266" y2="126" stroke="#52514e" stroke-width="2" marker-end="url(#f1s-ah)"></line>
+                  <text x="220" y="119" class="fig1-svg-label" text-anchor="middle">cross-attention</text>
+                  <line x1="266" y1="150" x2="174" y2="150" stroke="#d64545" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#f1s-ah-red)"></line>
+                  <path d="M214,144l12,12M226,144l-12,12" stroke="#d64545" stroke-width="2.2"></path>
+                  <text x="220" y="174" class="fig1-svg-red" text-anchor="middle">no path back</text>
+                </g>
+                <g class="s-part" data-s="1">
+                  <line x1="345" y1="168" x2="345" y2="222" stroke="#52514e" stroke-width="1.6" marker-end="url(#f1s-ah)"></line>
+                  <text x="337" y="199" class="fig1-svg-note" text-anchor="end">feature-prediction head</text>
+                  <rect x="270" y="224" width="150" height="32" rx="7" fill="#fff" stroke="#d6d9de"></rect>
+                  <text x="345" y="244" class="fig1-svg-out" text-anchor="middle">next-segment features</text>
+                  <polyline class="s-cond" points="268,240 95,240 95,170" fill="none" stroke="#2a78d6" stroke-width="2" marker-end="url(#f1s-ah-blue)"></polyline>
+                  <text x="104" y="206" class="fig1-svg-blue">conditioning for</text>
+                  <text x="104" y="221" class="fig1-svg-blue">the next segment</text>
+                </g>
+                <g class="s-part" data-s="2">
+                  <line x1="190" y1="290" x2="190" y2="246" stroke="#2a78d6" stroke-width="2" marker-end="url(#f1s-ah-blue)"></line>
+                  <text x="198" y="272" class="fig1-svg-blue">moved toward</text>
+                  <rect x="100" y="292" width="180" height="46" rx="9" fill="#eaf2fc" stroke="#2a78d6" stroke-width="1.6"></rect>
+                  <text x="190" y="312" class="fig1-svg-label" text-anchor="middle">target concept</text>
+                  <text x="190" y="329" class="fig1-svg-note" text-anchor="middle">Conditioning or NL Steering</text>
+                </g>
+              </svg>
+            </section>
+          </div>
+          <p class="fig1-caption" aria-live="polite"><span class="fig1-cap-step"></span><span class="fig1-cap-text"></span></p>
         </figure>
         <p class="tldr">We pretrain language models with a control channel that is separate from the input text. Steering through this channel is strong and keeps replies fluent. When an attacker controls the input text, the steering holds up under black-box and white-box adversarial prompts that defeat post-hoc steering.</p>
       </div>
@@ -262,17 +325,6 @@
     </div>
   </section>
 
-  <section class="section hero is-light">
-    <div class="container is-max-desktop">
-      <h2 class="title section-title">Method</h2>
-      <div class="columns method-steps">
-        <div class="column"><div class="step"><div class="step-head"><span class="step-num">1</span><h3>Annotate and splice</h3></div><p>Documents are divided into segments, and each segment is annotated with the sparse-autoencoder features active in it, filtered and clustered into a curated vocabulary. Segments are spliced so that the next segment is hard to predict from the preceding tokens alone, which gives the model a reason to rely on the channel.</p></div></div>
-        <div class="column"><div class="step"><div class="step-head"><span class="step-num">2</span><h3>Pretrain with a control channel</h3></div><p>A feature encoder processes these signals, and the decoder attends to them through one-way cross-attention: the decoder can use the control channel to predict text, but the text stream cannot update the encoder's representation.</p></div></div>
-        <div class="column"><div class="step"><div class="step-head"><span class="step-num">3</span><h3>Steer</h3></div><p>At inference time a feature-prediction head lets the model supply its own conditioning for the next segment. To steer, we move the conditioning toward a target concept, either as a vector in the feature space (Conditioning) or from a natural-language description of the concept (NL Steering).</p></div></div>
-      </div>
-      <p class="method-foot">We train Mancelle-3B and Mancelle-400M this way.</p>
-    </div>
-  </section>
 
   <section class="section">
     <div class="container is-max-widescreen">

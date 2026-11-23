@@ -1,6 +1,7 @@
 // Robustness overviews redrawn for the site: per method, the concept score without the attack (hollow) and with it
 // (filled), and the share kept. <div class="db" data-src="static/data/fig_blackbox.json"> with host tabs and attack toggle.
 (function () {
+  const tr = window.tr || ((s) => s);
   const NS = "http://www.w3.org/2000/svg";
   const OURS = "#2a78d6", BASE = "#6b7280";
   const el = (name, attrs, parent) => {
@@ -20,9 +21,9 @@
       tip.textContent = "";
       const add = (cls, t) => { const d = document.createElement("div"); d.className = cls; d.textContent = t; tip.appendChild(d); };
       add("ifig-tip-title", r.label);
-      add("ifig-tip-row", `Concept ${r.before.toFixed(2)} → ${r.after.toFixed(2)}`);
-      add("ifig-tip-row", `Kept ${r.kept.toFixed(0)}%${r.kept_lo != null ? ` [${r.kept_lo.toFixed(0)}, ${r.kept_hi.toFixed(0)}]` : ""}`);
-      add("ifig-tip-sub", data.attacks[attack].label);
+      add("ifig-tip-row", tr("Concept {a} → {b}", { a: r.before.toFixed(2), b: r.after.toFixed(2) }));
+      add("ifig-tip-row", tr("Kept {k}%", { k: r.kept.toFixed(0) }) + (r.kept_lo != null ? ` [${r.kept_lo.toFixed(0)}, ${r.kept_hi.toFixed(0)}]` : ""));
+      add("ifig-tip-sub", tr(data.attacks[attack].label));
       const b = root.getBoundingClientRect(); tip.hidden = false;
       tip.style.left = Math.max(4, Math.min(evt.clientX - b.left + 14, b.width - tip.offsetWidth - 8)) + "px";
       tip.style.top = Math.max(evt.clientY - b.top - tip.offsetHeight - 12, 4) + "px";
@@ -43,14 +44,14 @@
         el("line", { x1: X(v), x2: X(v), y1: top - 6, y2: yEnd, class: v === 0 ? "ifig-base" : "ifig-grid" }, svg);
         txt(svg, { x: X(v), y: yEnd + 16, class: "ifig-tick", "text-anchor": "middle" }, v.toFixed(1));
       }
-      txt(svg, { x: (X(0) + X(2)) / 2, y: yEnd + 34, class: "ifig-axis", "text-anchor": "middle" }, "Concept score (mean over 50 concepts, 0–2)");
+      txt(svg, { x: (X(0) + X(2)) / 2, y: yEnd + 34, class: "ifig-axis", "text-anchor": "middle" }, tr("Concept score (mean over 50 concepts, 0–2)"));
       // legend for the two dot styles
       const lx = narrow ? 6 : L + 6, lx2 = narrow ? 140 : L + 170;
       el("circle", { cx: lx, cy: 10, r: 5, fill: "#fff", stroke: "#52514e", "stroke-width": 1.5 }, svg);
-      txt(svg, { x: lx + 10, y: 14, class: "ifig-tick" }, "without the attack");
+      txt(svg, { x: lx + 10, y: 14, class: "ifig-tick" }, tr("without the attack"));
       el("circle", { cx: lx2, cy: 10, r: 5, fill: "#52514e" }, svg);
-      txt(svg, { x: lx2 + 10, y: 14, class: "ifig-tick" }, "with the attack");
-      txt(svg, { x: W - 4, y: 14, class: "ifig-tick", "text-anchor": "end" }, "kept");
+      txt(svg, { x: lx2 + 10, y: 14, class: "ifig-tick" }, tr("with the attack"));
+      txt(svg, { x: W - 4, y: 14, class: "ifig-tick", "text-anchor": "end" }, tr("kept"));
       rows.forEach((r, i) => {
         const cy = top + i * rowH + rowH / 2, color = r.ours ? OURS : BASE;
         const label = r.ours ? `Mancelle-3B · ${r.method}` : `${data.hosts[host]} · ${r.method}`;
@@ -80,7 +81,7 @@
     let t = null;
     window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => data && draw(), 200); });
     fetch(root.dataset.src).then((r) => r.json()).then((d) => { data = d; draw(); })
-      .catch(() => { svg.replaceWith(document.createTextNode("The figure could not be loaded.")); });
+      .catch(() => { svg.replaceWith(document.createTextNode(tr("The figure could not be loaded."))); });
   }
   document.querySelectorAll(".db[data-src]").forEach(init);
 })();

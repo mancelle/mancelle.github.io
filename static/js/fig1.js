@@ -1,6 +1,7 @@
 // Figure 1 walkthrough: steps light up one at a time with the paper's caption sentence for that step.
 // Pretraining = the paper's Figure 1, steps (1)-(5); Steering = how the same channel is used at inference.
 (function () {
+  const tr = window.tr || ((s) => s);
   const fig = document.querySelector(".fig1[data-mode]");
   if (!fig) return;
   const CAPTION = {
@@ -41,7 +42,7 @@
       b.setAttribute("aria-selected", b.dataset.mode === mode ? "true" : "false");
     });
     capStep.textContent = step ? `${step} / ${last()}` : "";
-    capText.textContent = CAPTION[mode][step];
+    capText.textContent = tr(CAPTION[mode][step]);
     // While walking, the caption is pinned to the bottom of the screen; keep the active card in the space above it.
     if (scroll && step) {
       const target = mode === "pretrain" ? pre.querySelector(`[data-step="${step}"]`) : steer;
@@ -52,7 +53,7 @@
       }
     }
   }
-  const label = (b, on) => (b.textContent = b.classList.contains("fig1-cap-btn") ? (on ? "❚❚" : "▶") : (on ? "❚❚ Pause" : "▶ Walk me through it"));
+  const label = (b, on) => (b.textContent = b.classList.contains("fig1-cap-btn") ? (on ? "❚❚" : "▶") : (on ? tr("❚❚ Pause") : tr("▶ Walk me through it")));
   function stop() { clearInterval(timer); timer = null; plays.forEach((b) => label(b, false)); }
   function go(k, scroll = true) { step = Math.max(0, Math.min(last(), k)); render(scroll); }
 
@@ -80,12 +81,12 @@
       const k = slider.value;
       sva.style.setProperty("--t", k / 6);
       val.textContent = k;
-      const how = k == 0 ? "the head’s prediction" : k == 6 ? "set by the target concept" : "prediction, moved toward the target";
+      const how = tr(k == 0 ? "the head’s prediction" : k == 6 ? "set by the target concept" : "prediction, moved toward the target");
       sva.querySelectorAll(".sva-sig.is-steered em").forEach((e) => (e.textContent = how));
       if (!steerData) return;
       steerData.parts[k].forEach((t, i) => (cells[i].textContent = t));
       const cs = steerData.concept_score?.[k];
-      score.textContent = cs == null ? "" : `concept score ${cs.toFixed(2)} / 2`;
+      score.textContent = cs == null ? "" : tr("concept score {v} / 2", { v: cs.toFixed(2) });
     };
     slider.addEventListener("input", show);
     fetch(sva.dataset.src).then((r) => r.json()).then((d) => { steerData = d; show(); }).catch(() => {});

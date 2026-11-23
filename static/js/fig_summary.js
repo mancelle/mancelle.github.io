@@ -2,6 +2,7 @@
 // (y), a short bar without the attack and a marker under it. <div class="sm" data-src="static/data/fig_summary.json"> with
 // attack and host tabs; method names are placed next to their points, nudged until they do not overlap.
 (function () {
+  const tr = window.tr || ((s) => s);
   const NS = "http://www.w3.org/2000/svg";
   const BLUE = "#2a78d6", ORANGE = "#eb6834", AQUA = "#1baf7a", GRAY = "#8a8f98";
   const STYLE = {
@@ -40,11 +41,11 @@
       tip.textContent = "";
       const add = (cls, t) => { const d = document.createElement("div"); d.className = cls; d.textContent = t; tip.appendChild(d); };
       add("ifig-tip-title", label);
-      add("ifig-tip-row", `AxBench score without the attack ${p.x.toFixed(2)}`);
-      add("ifig-tip-row muted", `concept ${p.clean.concept.toFixed(2)} · instruction ${p.clean.instruction.toFixed(2)} · fluency ${p.clean.fluency.toFixed(2)}`);
-      add("ifig-tip-row", `Concept ${p.before.toFixed(2)} → ${p.y.toFixed(2)} under the attack (kept ${p.kept.toFixed(0)}%)`);
-      if (p.method === "Prompt SFT") add("ifig-tip-row muted", "* favored by this comparison (see the note below the chart)");
-      add("ifig-tip-sub", data.attacks[attack].label);
+      add("ifig-tip-row", tr("AxBench score without the attack {v}", { v: p.x.toFixed(2) }));
+      add("ifig-tip-row muted", tr("concept {c} · instruction {i} · fluency {f}", { c: p.clean.concept.toFixed(2), i: p.clean.instruction.toFixed(2), f: p.clean.fluency.toFixed(2) }));
+      add("ifig-tip-row", tr("Concept {a} → {b} under the attack (kept {k}%)", { a: p.before.toFixed(2), b: p.y.toFixed(2), k: p.kept.toFixed(0) }));
+      if (p.method === "Prompt SFT") add("ifig-tip-row muted", tr("* favored by this comparison (see the note below the chart)"));
+      add("ifig-tip-sub", tr(data.attacks[attack].label));
       const b = root.getBoundingClientRect(); tip.hidden = false;
       tip.style.left = Math.max(4, Math.min(evt.clientX - b.left + 14, b.width - tip.offsetWidth - 8)) + "px";
       tip.style.top = Math.max(evt.clientY - b.top - tip.offsetHeight - 12, 4) + "px";
@@ -67,15 +68,15 @@
         el("line", { x1: X(X0), x2: X(X1), y1: Y(v), y2: Y(v), class: v === 0 ? "ifig-base" : "ifig-grid" }, svg);
         txt(svg, { x: X(X0) - 8, y: Y(v) + 4, class: "ifig-tick", "text-anchor": "end" }, v.toFixed(1));
       }
-      txt(svg, { x: (X(X0) + X(X1)) / 2, y: H - B + 36, class: "ifig-axis", "text-anchor": "middle" }, "AxBench score without the attack →");
-      txt(svg, { x: (X(X0) + X(X1)) / 2, y: H - B + 51, class: "ifig-tick", "text-anchor": "middle" }, "harmonic mean of concept, instruction and fluency");
-      txt(svg, { x: 12, y: (Y(Y0) + Y(Y1)) / 2, class: "ifig-axis", "text-anchor": "middle", transform: `rotate(-90 12 ${(Y(Y0) + Y(Y1)) / 2})` }, "Concept score →");
-      txt(svg, { x: X(X1) - 4, y: Y(Y1) + 14, class: "sm-better", "text-anchor": "end" }, "better ↗");
+      txt(svg, { x: (X(X0) + X(X1)) / 2, y: H - B + 36, class: "ifig-axis", "text-anchor": "middle" }, tr("AxBench score without the attack →"));
+      txt(svg, { x: (X(X0) + X(X1)) / 2, y: H - B + 51, class: "ifig-tick", "text-anchor": "middle" }, tr("harmonic mean of concept, instruction and fluency"));
+      txt(svg, { x: 12, y: (Y(Y0) + Y(Y1)) / 2, class: "ifig-axis", "text-anchor": "middle", transform: `rotate(-90 12 ${(Y(Y0) + Y(Y1)) / 2})` }, tr("Concept score →"));
+      txt(svg, { x: X(X1) - 4, y: Y(Y1) + 14, class: "sm-better", "text-anchor": "end" }, tr("better ↗"));
       // key for the two marks
       el("line", { x1: L, x2: L + 12, y1: 12, y2: 12, stroke: "#52514e", "stroke-width": 2.5, "stroke-linecap": "round" }, svg);
-      txt(svg, { x: L + 16, y: 16, class: "ifig-tick" }, "without the attack");
+      txt(svg, { x: L + 16, y: 16, class: "ifig-tick" }, tr("without the attack"));
       el("circle", { cx: L + (narrow ? 132 : 146), cy: 12, r: 5, fill: "#52514e" }, svg);
-      txt(svg, { x: L + (narrow ? 142 : 156), y: 16, class: "ifig-tick" }, "under the attack");
+      txt(svg, { x: L + (narrow ? 142 : 156), y: 16, class: "ifig-tick" }, tr("under the attack"));
 
       // obstacles for label placement: every mark and drop line, plus the "better" note
       const boxes = [{ x: X(X1) - 60, y: Y(Y1), w: 60, h: 20 }];
@@ -129,7 +130,7 @@
     let t = null;
     window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => data && draw(), 200); });
     fetch(root.dataset.src).then((r) => r.json()).then((d) => { data = d; draw(); })
-      .catch(() => { svg.replaceWith(document.createTextNode("The figure could not be loaded.")); });
+      .catch(() => { svg.replaceWith(document.createTextNode(tr("The figure could not be loaded."))); });
   }
   document.querySelectorAll(".sm[data-src]").forEach(init);
 })();

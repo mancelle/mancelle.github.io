@@ -8,13 +8,14 @@ const EXAMPLES = [
   { label: "How a bill becomes law · C/C++ code", instruction: "Explain how a bill becomes a law.", concept: 2 },
 ];
 const SOURCE = {
-  paper: (a) => `found by the paper’s ${a} attacker against this model`,
-  release_rerun_not_in_paper: (a) => `found by the ${a} attacker against this model (public-release rerun)`,
-  custom: () => "your text, the same for both models",
-  none: () => "no suffix",
+  paper: (a) => tr("found by the paper’s {a} attacker against this model", { a }),
+  release_rerun_not_in_paper: (a) => tr("found by the {a} attacker against this model (public-release rerun)", { a }),
+  custom: () => tr("your text, the same for both models"),
+  none: () => tr("no suffix"),
 };
 
 const $ = (id) => document.getElementById(id);
+const tr = window.tr || ((s) => s);
 const root = $("demo-app");
 if (root) init();
 
@@ -26,7 +27,7 @@ async function init() {
   const cards = { mancelle: card("mancelle"), qwen: card("qwen") };
   let data;
   try { data = await (await fetch("static/data/demo.json")).json(); }
-  catch { return setStatus(ui, "The demo could not be loaded.", true); }
+  catch { return setStatus(ui, tr("The demo could not be loaded."), true); }
   for (const c of data.concepts.filter((c) => c.id < 50)) {
     const o = document.createElement("option");
     o.value = String(c.id); o.textContent = `${c.id + 1}. ${c.text}`; ui.concept.appendChild(o);
@@ -40,7 +41,7 @@ async function init() {
   ui.modes.forEach((b) => b.addEventListener("click", () => setMode(b.dataset.attack)));
   for (const ex of EXAMPLES) {
     const chip = document.createElement("button");
-    chip.type = "button"; chip.className = "demo-chip"; chip.textContent = ex.label;
+    chip.type = "button"; chip.className = "demo-chip"; chip.textContent = tr(ex.label);
     chip.addEventListener("click", () => { ui.instruction.value = ex.instruction; ui.concept.value = String(ex.concept); ui.instruction.focus(); });
     ui.chips.appendChild(chip);
   }
@@ -53,14 +54,14 @@ async function init() {
   setMode(ex.args.attack_mode);
   ui.custom.value = ex.args.custom_suffix;
   show(cards, ex.info, { mancelle: [ex.mancelle_attacked, ex.mancelle_clean], qwen: [ex.qwen_attacked, ex.qwen_clean] });
-  setStatus(ui, `Recorded on the live demo (${ex.recorded}): the first example, the attackers’ ${ex.args.attack_mode.toUpperCase()} suffixes, seed ${ex.args.seed}. Press Generate to run your own.`);
+  setStatus(ui, tr("Recorded on the live demo ({d}): the first example, the attackers’ {m} suffixes, seed {s}. Press Generate to run your own.", { d: ex.recorded, m: ex.args.attack_mode.toUpperCase(), s: ex.args.seed }));
 
   let client = null;
   ui.go.addEventListener("click", async () => {
     const instruction = ui.instruction.value.trim();
     const suffix = ui.custom.value.trim();
-    if (!instruction) return setStatus(ui, "Type an instruction first.", true);
-    if (mode === "custom" && !suffix) return setStatus(ui, "Type the suffix to append, or pick another attack.", true);
+    if (!instruction) return setStatus(ui, tr("Type an instruction first."), true);
+    if (mode === "custom" && !suffix) return setStatus(ui, tr("Type the suffix to append, or pick another attack."), true);
     const seed = 1 + Math.floor(Math.random() * 100000);
     busy(ui, cards, true);
     const t0 = performance.now();
@@ -70,19 +71,19 @@ async function init() {
       for await (const msg of client.submit("/attack", args)) {
         if (msg.type === "status") {
           if (msg.stage === "error") throw new Error(msg.message || "The demo returned an error.");
-          if (msg.stage === "pending") setStatus(ui, `Waiting for a GPU${msg.position > 0 ? ` (${msg.position} ahead of you)` : ""}…`);
-          else if (msg.stage === "generating") setStatus(ui, "Generating…");
+          if (msg.stage === "pending") setStatus(ui, msg.position > 0 ? tr("Waiting for a GPU ({n} ahead of you)…", { n: msg.position }) : tr("Waiting for a GPU…"));
+          else if (msg.stage === "generating") setStatus(ui, tr("Generating…"));
         } else if (msg.type === "data") {
           const [ma, qa, mc, qc, info] = msg.data;
           show(cards, JSON.parse(info), { mancelle: [ma, mc], qwen: [qa, qc] });
-          setStatus(ui, `Done in ${((performance.now() - t0) / 1000).toFixed(0)} s · seed ${seed}. Replies are sampled, so each run differs.`);
+          setStatus(ui, tr("Done in {t} s · seed {s}. Replies are sampled, so each run differs.", { t: ((performance.now() - t0) / 1000).toFixed(0), s: seed }));
         }
       }
     } catch (e) {
       client = null;
       for (const c of Object.values(cards)) c.reply.textContent = "";
-      const msg = (e?.message || "Could not reach the demo.").trim();
-      setStatus(ui, `${msg}${/[.!?]$/.test(msg) ? "" : "."} You can also try it on Hugging Face.`, true);
+      const msg = (e?.message || tr("Could not reach the demo.")).trim();
+      setStatus(ui, `${msg}${/[.!?。]$/.test(msg) ? "" : "."} ${tr("You can also try it on Hugging Face.")}`, true);
     } finally {
       busy(ui, cards, false);
     }
@@ -108,8 +109,8 @@ function show(cards, info, replies) {
     c.cleanWrap.hidden = !replies[key][1];
     c.clean.textContent = replies[key][1] || "";
     const cs = info.concept_score?.[key] || {};
-    score(c.score, cs.attacked, "Concept score");
-    score(c.cleanScore, cs.clean, "concept");
+    score(c.score, cs.attacked, tr("Concept score"));
+    score(c.cleanScore, cs.clean, tr("concept"));
   }
   const note = document.getElementById("demo-score-note");
   if (note) note.hidden = !info.concept_score;
@@ -132,8 +133,8 @@ function busy(ui, cards, on) {
   ui.go.disabled = on;
   ui.go.classList.toggle("is-loading", on);
   if (on) {
-    for (const c of Object.values(cards)) { c.reply.textContent = "Generating…"; c.reply.classList.add("is-loading"); c.cleanWrap.hidden = true; c.score.hidden = true; }
-    setStatus(ui, "Connecting to the demo…");
+    for (const c of Object.values(cards)) { c.reply.textContent = tr("Generating…"); c.reply.classList.add("is-loading"); c.cleanWrap.hidden = true; c.score.hidden = true; }
+    setStatus(ui, tr("Connecting to the demo…"));
   }
 }
 

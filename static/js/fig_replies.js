@@ -3,6 +3,7 @@
 // Data: {meta, steps:[...], step_labels?:[...], systems:[{key,label,role}], items:[{concept, instruction, cells:[{<key>:{reply,concept,fluency,instruction,suffix?}}]}],
 //        curves:{<key>:[{concept, fluency}]}}  (cells and curves are indexed like steps)
 (function () {
+  const tr = window.tr || ((s) => s);
   const NS = "http://www.w3.org/2000/svg";
   const COLORS = { ours: "#2a78d6", base: "#eb6834" };
   const el = (name, attrs, parent) => {
@@ -35,7 +36,7 @@
     if (root.dataset.alts) {
       const sw = h("div", "rx-switch", null, root);
       for (const a of JSON.parse(root.dataset.alts)) {
-        const b = h("button", a.src === root.dataset.src ? "is-active" : null, a.label, sw);
+        const b = h("button", a.src === root.dataset.src ? "is-active" : null, tr(a.label), sw);
         b.type = "button";
         b.addEventListener("click", () => {
           if (root.dataset.src === a.src) return;
@@ -44,7 +45,7 @@
       }
     }
     const src = root.dataset.src;
-    const stepLabel = root.dataset.stepLabel || "Strength";
+    const stepLabel = tr(root.dataset.stepLabel || "Strength");
     const head = h("div", "rx-head", null, root);
     const pick = h("div", "rx-pick", null, head);
     const conceptEl = h("div", "rx-concept", null, head);
@@ -53,7 +54,7 @@
     const lab = h("label", "rx-step-label", null, ctl);
     lab.appendChild(document.createTextNode(stepLabel + " "));
     const stepOut = h("b", null, null, lab);
-    const play = h("button", "rx-play", "▶ Play", lab);
+    const play = h("button", "rx-play", tr("▶ Play"), lab);
     play.type = "button";
     const slider = h("input", null, null, ctl);
     slider.type = "range"; slider.min = "0"; slider.step = "1";
@@ -93,7 +94,7 @@
       const it = data.items[item];
       conceptEl.textContent = it.concept;
       instrEl.textContent = it.instruction;
-      stepOut.textContent = (data.step_labels || data.steps)[idx];
+      stepOut.textContent = tr(String((data.step_labels || data.steps)[idx]));
       [...pick.children].forEach((b, i) => b.classList.toggle("is-active", i === item));
       cards.textContent = "";
       for (const sys of data.systems) {
@@ -103,15 +104,15 @@
         const top = h("div", "rx-card-top", null, card);
         h("div", "rx-card-title", sys.label, top);
         const meters = h("div", "rx-meters", null, top);
-        meter(meters, "Concept", cell?.concept);
-        meter(meters, "Fluency", cell?.fluency);
+        meter(meters, tr("Concept"), cell?.concept);
+        meter(meters, tr("Fluency"), cell?.fluency);
         if (cell?.suffix) {
           const s = h("div", "rx-suffix", null, card);
-          h("span", "rx-suffix-label", (data.suffix_label || "Attacker’s suffix") + (cell.suffix_tag ? ` · ${cell.suffix_tag}` : ""), s);
+          h("span", "rx-suffix-label", tr(data.suffix_label || "Attacker’s suffix") + (cell.suffix_tag ? ` · ${tr(cell.suffix_tag)}` : ""), s);
           h("span", "rx-suffix-text", cell.suffix, s);
         }
-        if (cell?.cmean) h("div", "rx-cmean", `This concept, all 10 instructions: concept ${cell.cmean.concept.toFixed(1)} · fluency ${cell.cmean.fluency.toFixed(1)}`, top);
-        h("div", "rx-reply", cell ? cell.reply : "No reply saved for this setting.", card);
+        if (cell?.cmean) h("div", "rx-cmean", tr("This concept, all 10 instructions: concept {c} · fluency {f}", { c: cell.cmean.concept.toFixed(1), f: cell.cmean.fluency.toFixed(1) }), top);
+        h("div", "rx-reply", cell ? cell.reply : tr("No reply saved for this setting."), card);
       }
       drawMini(idx);
     }
@@ -124,7 +125,7 @@
         slider.hidden = true; ticks.hidden = true; play.hidden = true;
         const seg = h("div", "rx-toggle", null, ctl);
         (d.step_labels || d.steps).forEach((t, i) => {
-          const b = h("button", null, String(t), seg);
+          const b = h("button", null, tr(String(t)), seg);
           b.type = "button";
           b.addEventListener("click", () => { slider.value = String(i); [...seg.children].forEach((x, j) => x.classList.toggle("is-active", j === i)); render(); });
         });
@@ -133,7 +134,7 @@
       }
       slider.value = root.dataset.start === "max" ? slider.max : "0";
       const labels = d.step_labels || d.steps;
-      labels.forEach((t, i) => { const s = h("span", null, String(t), ticks); s.style.left = `${(i / (labels.length - 1)) * 100}%`; });
+      labels.forEach((t, i) => { const s = h("span", null, tr(String(t)), ticks); s.style.left = `${(i / (labels.length - 1)) * 100}%`; });
       d.items.forEach((it, i) => {
         const b = h("button", "rx-chip", it.short || it.concept, pick);
         b.type = "button"; b.title = it.concept;
@@ -145,17 +146,17 @@
         h("i", null, null, k);
         k.appendChild(document.createTextNode(sys.label));
       }
-      h("span", "rx-key-note", "solid: mean concept score · dashed: mean fluency", legend);
-      note.textContent = d.meta.rule || "";
+      h("span", "rx-key-note", tr("solid: mean concept score · dashed: mean fluency"), legend);
+      note.textContent = tr(d.meta.rule || "");
       render();
-    }).catch(() => { root.textContent = "The examples could not be loaded."; });
+    }).catch(() => { root.textContent = tr("The examples could not be loaded."); });
     slider.addEventListener("input", render);
     let timer = null;
-    const stop = () => { clearInterval(timer); timer = null; play.textContent = "▶ Play"; };
+    const stop = () => { clearInterval(timer); timer = null; play.textContent = tr("▶ Play"); };
     root._rxStop = stop;
     play.addEventListener("click", () => {
       if (timer) return stop();
-      slider.value = "0"; render(); play.textContent = "❚❚ Pause";
+      slider.value = "0"; render(); play.textContent = tr("❚❚ Pause");
       timer = setInterval(() => {
         if (Number(slider.value) >= Number(slider.max)) return stop();
         slider.value = String(Number(slider.value) + 1); render();

@@ -2,6 +2,7 @@
 // <div class="pl" data-kind="clean|negative">: clean = paper Figure 2 (tabs: host of the baselines);
 // negative = appendix negative steering, negated positive signal (tabs: comparison), each series from its unsteered point.
 (function () {
+  const tr = window.tr || ((s) => s);
   const NS = "http://www.w3.org/2000/svg";
   const BLUE = "#2a78d6", ORANGE = "#eb6834", AQUA = "#1baf7a", GRAY = "#8a8f98";
   const STYLE = {
@@ -77,8 +78,8 @@
       const clipId = `pl-clip-${kind}`;
       el("rect", { x: M.l, y: M.t, width: W - M.l - M.r, height: H - M.t - M.b }, el("clipPath", { id: clipId }, el("defs", {}, svg)));
       const plot = el("g", { "clip-path": `url(#${clipId})` }, svg);
-      el("text", { x: (X(R.x[0]) + X(R.x[1])) / 2, y: H - 8, class: "ifig-axis", "text-anchor": "middle" }, svg).textContent = narrow ? "Quality →" : "Quality (harmonic mean of fluency and instruction relevance) →";
-      const yl = kind === "negative" ? "Concept score (lower = stronger suppression)" : "Concept score →";
+      el("text", { x: (X(R.x[0]) + X(R.x[1])) / 2, y: H - 8, class: "ifig-axis", "text-anchor": "middle" }, svg).textContent = tr(narrow ? "Quality →" : "Quality (harmonic mean of fluency and instruction relevance) →");
+      const yl = tr(kind === "negative" ? "Concept score (lower = stronger suppression)" : "Concept score →");
       const ym = (Y(R.y[0]) + Y(R.y[1])) / 2;
       el("text", { x: 14, y: ym, class: "ifig-axis", "text-anchor": "middle", transform: `rotate(-90 14 ${ym})` }, svg).textContent = yl;
 
@@ -89,7 +90,7 @@
         const st = STYLE[s.label] || { color: GRAY };
         if (s.unsteered) {
           const u = el("circle", { cx: X(s.unsteered.x), cy: Y(s.unsteered.y), r: 5, fill: "#fff", stroke: ours(s) ? BLUE : "#52514e", "stroke-width": 1.5 }, plot);
-          u.addEventListener("pointermove", (e) => showTip(e, `${s.model} · unsteered`, [["ifig-tip-row", `Concept ${fmt(s.unsteered.y)} · Quality ${fmt(s.unsteered.x)}`]]));
+          u.addEventListener("pointermove", (e) => showTip(e, `${s.model} · ${tr("unsteered")}`, [["ifig-tip-row", tr("Concept {c} · Quality {q}", { c: fmt(s.unsteered.y), q: fmt(s.unsteered.x) })]]));
           u.addEventListener("pointerleave", hide);
         }
         if (s.points.length > 1 || st.shape == null) {
@@ -102,8 +103,8 @@
           el("circle", { cx: X(p.x), cy: Y(p.y), r: 10, fill: "transparent" }, g);
           if (st.shape && s.points.length === 1) shape(st.shape, X(p.x), Y(p.y), g, st.color);
           else el("circle", { cx: X(p.x), cy: Y(p.y), r: last ? 5 : 2.6, fill: st.color, stroke: "#fff", "stroke-width": last ? 2 : 1 }, g);
-          const rows = [["ifig-tip-row", `Concept ${fmt(p.y)} · Quality ${fmt(p.x)}`], ["ifig-tip-row muted", `Fluency ${fmt(p.fl)} · Instruction ${fmt(p.ins)}`],
-                        ["ifig-tip-sub", p.strength == null ? "single strength" : `strength ${p.strength}`]];
+          const rows = [["ifig-tip-row", tr("Concept {c} · Quality {q}", { c: fmt(p.y), q: fmt(p.x) })], ["ifig-tip-row muted", tr("Fluency {f} · Instruction {i}", { f: fmt(p.fl), i: fmt(p.ins) })],
+                        ["ifig-tip-sub", p.strength == null ? tr("single strength") : tr("strength {s}", { s: p.strength })]];
           g.addEventListener("pointermove", (e) => showTip(e, `${s.model} · ${s.label}`, rows));
           g.addEventListener("pointerleave", hide);
           g.addEventListener("focus", () => { const b = g.getBoundingClientRect(); showTip({ clientX: b.x + b.width / 2, clientY: b.y }, `${s.model} · ${s.label}`, rows); });
@@ -134,7 +135,7 @@
     let t = null;
     window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(() => data && draw(), 200); });
     fetch(kind === "clean" ? "static/data/fig_clean.json" : "static/data/fig_negative.json").then((r) => r.json())
-      .then((d) => { data = d; draw(); }).catch(() => { svg.replaceWith(document.createTextNode("The figure could not be loaded.")); });
+      .then((d) => { data = d; draw(); }).catch(() => { svg.replaceWith(document.createTextNode(tr("The figure could not be loaded."))); });
   }
   document.querySelectorAll(".pl[data-kind]").forEach(init);
 })();

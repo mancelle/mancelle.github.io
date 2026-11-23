@@ -388,3 +388,11 @@ body { overflow-x: clip; }
 .fig1-split-side { align-self: center; }
 .fig1-steps > [data-step="1"] .fig1-split, .fig1-steps > [data-step="2"] .fig1-split { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
 .fig1-steps > [data-step="2"] .fig1-split-main { max-width: 460px; }
+/* Steps 1 and 2 side by side again; step 2 is the drawing only. Steps 3+ stay full-width rows. */
+.fig1-steps { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important; }
+.fig1-steps > [data-step="3"], .fig1-steps > [data-step="4"] { grid-column: 1 / -1; }
+.fig1-steps > [data-step="1"] .fig1-split, .fig1-steps > [data-step="2"] .fig1-split { grid-template-columns: 1fr; }
+.fig1-steps > [data-step="1"] .fig1-split-side { align-self: start; }
+.fig1-steps > [data-step="2"] .fig1-split-main { max-width: none; }
+.fig1-steps > [data-step="2"] .fig1-splice { align-items: center; }
+@media (max-width: 760px) { .fig1-steps { grid-template-columns: 1fr !important; } }

@@ -40,17 +40,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=20261123g">
-  <link rel="stylesheet" href="static/css/site.css?v=20261123g">
+  <link rel="stylesheet" href="static/css/index.css?v=20261123h">
+  <link rel="stylesheet" href="static/css/site.css?v=20261123h">
 
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/index.js?v=20261123g"></script>
-  <script type="module" src="static/js/demo.js?v=20261123g"></script>
-  <script defer src="static/js/fig_replies.js?v=20261123g"></script>
-  <script defer src="static/js/fig_plane.js?v=20261123g"></script>
-  <script defer src="static/js/fig_dumbbell.js?v=20261123g"></script>
-  <script defer src="static/js/fig_summary.js?v=20261123g"></script>
-  <script defer src="static/js/fig1.js?v=20261123g"></script>
+  <script defer src="static/js/index.js?v=20261123h"></script>
+  <script type="module" src="static/js/demo.js?v=20261123h"></script>
+  <script defer src="static/js/fig_replies.js?v=20261123h"></script>
+  <script defer src="static/js/fig_plane.js?v=20261123h"></script>
+  <script defer src="static/js/fig_dumbbell.js?v=20261123h"></script>
+  <script defer src="static/js/fig_summary.js?v=20261123h"></script>
+  <script defer src="static/js/fig1.js?v=20261123h"></script>
 </head>
 <body>
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
@@ -534,9 +534,9 @@
           <section class="fig1-card fig1-wide" data-step="5">
             <h4><span class="fig1-num">5</span>Conditional pretraining</h4>
             <div class="f5" role="img" aria-label="Each segment&rsquo;s conditioning signal enters the encoder (control channel); text in segment j reads only signal j through one-way cross-attention, with no path back; the decoder predicts the next token and the next segment&rsquo;s features">
-              <div class="f5-head enc">Encoder<i>control channel</i></div>
+              <div class="f5-head enc">Control encoder</div>
               <div class="f5-head mid"><b>cross-attention</b><i>own segment only</i></div>
-              <div class="f5-head dec">Decoder<i>text stream</i></div>
+              <div class="f5-head dec">Text decoder</div>
               <div class="f5-sig s1"><b>f<sub>1</sub></b><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i></div><div class="f5-arr"></div><div class="f5-seg s1"><span>&hellip; parameterizing the points on the</span></div>
               <div class="f5-sig s2"><b>f<sub>2</sub></b><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i></div><div class="f5-arr"></div><div class="f5-seg s2"><span>circles. The fact that the line connecting the points of tangency is tangent to both circles gives us a condition on the angles: the line is perpendicular to</span></div>
               <div class="f5-sig s3"><b>f<sub>3</sub></b><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="p"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i><i class="n"></i></div><div class="f5-arr"></div><div class="f5-seg s3"><span>the radii at the points of tangency.</span></div>
@@ -581,11 +581,9 @@
                 </g>
                 <g class="s-core">
                   <rect x="20" y="108" width="150" height="58" rx="10" fill="#fff" stroke="#2a78d6" stroke-width="2"></rect>
-                  <text x="95" y="134" class="fig1-svg-title" text-anchor="middle">Encoder</text>
-                  <text x="95" y="153" class="fig1-svg-note" text-anchor="middle">control channel</text>
+                  <text x="95" y="142" class="fig1-svg-title" text-anchor="middle">Control encoder</text>
                   <rect x="270" y="108" width="150" height="58" rx="10" fill="#fff" stroke="#c3c2b7" stroke-width="1.5"></rect>
-                  <text x="345" y="134" class="fig1-svg-title" text-anchor="middle">Decoder</text>
-                  <text x="345" y="153" class="fig1-svg-note" text-anchor="middle">text stream</text>
+                  <text x="345" y="142" class="fig1-svg-title" text-anchor="middle">Text decoder</text>
                   <line x1="172" y1="126" x2="266" y2="126" stroke="#52514e" stroke-width="2" marker-end="url(#f1s-ah)"></line>
                   <text x="220" y="119" class="fig1-svg-label" text-anchor="middle">cross-attention</text>
                   <line x1="266" y1="150" x2="174" y2="150" stroke="#d64545" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#f1s-ah-red)"></line>

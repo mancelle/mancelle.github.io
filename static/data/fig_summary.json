@@ -1,0 +1,1025 @@
+{
+ "hosts": {
+  "pythia": "Pythia-2.8B",
+  "qwen": "Qwen2.5-3B",
+  "smollm3": "SmolLM3-3B"
+ },
+ "attacks": {
+  "rl": {
+   "label": "Black-box: RL attacker, 40 steps",
+   "panels": {
+    "pythia": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.334,
+      "before": 1.376,
+      "kept": 96.9,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "NL Steering",
+      "ours": true,
+      "x": 1.192,
+      "y": 1.164,
+      "before": 1.184,
+      "kept": 98.3,
+      "clean": {
+       "concept": 1.158,
+       "instruction": 1.768,
+       "fluency": 0.92
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 0.835,
+      "y": 0.508,
+      "before": 0.436,
+      "kept": 116.5,
+      "clean": {
+       "concept": 0.45,
+       "instruction": 1.852,
+       "fluency": 1.202
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.158,
+      "y": 0.74,
+      "before": 0.824,
+      "kept": 89.8,
+      "clean": {
+       "concept": 0.842,
+       "instruction": 1.872,
+       "fluency": 1.15
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.805,
+      "y": 0.454,
+      "before": 0.496,
+      "kept": 91.5,
+      "clean": {
+       "concept": 0.5,
+       "instruction": 1.876,
+       "fluency": 0.838
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.699,
+      "y": 0.344,
+      "before": 0.338,
+      "kept": 101.8,
+      "clean": {
+       "concept": 0.362,
+       "instruction": 1.864,
+       "fluency": 1.008
+      }
+     },
+     {
+      "method": "Prompt SFT",
+      "ours": false,
+      "x": 1.469,
+      "y": 1.14,
+      "before": 1.652,
+      "kept": 69.0,
+      "clean": {
+       "concept": 1.664,
+       "instruction": 1.96,
+       "fluency": 1.074
+      }
+     },
+     {
+      "method": "SteerLM SFT",
+      "ours": false,
+      "x": 1.334,
+      "y": 1.014,
+      "before": 1.23,
+      "kept": 82.4,
+      "clean": {
+       "concept": 1.26,
+       "instruction": 1.954,
+       "fluency": 1.06
+      }
+     }
+    ],
+    "qwen": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.334,
+      "before": 1.376,
+      "kept": 96.9,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "NL Steering",
+      "ours": true,
+      "x": 1.192,
+      "y": 1.164,
+      "before": 1.184,
+      "kept": 98.3,
+      "clean": {
+       "concept": 1.158,
+       "instruction": 1.768,
+       "fluency": 0.92
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.533,
+      "y": 0.272,
+      "before": 1.216,
+      "kept": 22.4,
+      "clean": {
+       "concept": 1.238,
+       "instruction": 1.972,
+       "fluency": 1.558
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.367,
+      "y": 0.486,
+      "before": 0.97,
+      "kept": 50.1,
+      "clean": {
+       "concept": 0.946,
+       "instruction": 1.942,
+       "fluency": 1.608
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 1.012,
+      "y": 0.678,
+      "before": 0.868,
+      "kept": 78.1,
+      "clean": {
+       "concept": 0.87,
+       "instruction": 1.588,
+       "fluency": 0.844
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.73,
+      "y": 0.242,
+      "before": 0.356,
+      "kept": 68.0,
+      "clean": {
+       "concept": 0.354,
+       "instruction": 1.986,
+       "fluency": 1.284
+      }
+     }
+    ],
+    "smollm3": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.334,
+      "before": 1.376,
+      "kept": 96.9,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "NL Steering",
+      "ours": true,
+      "x": 1.192,
+      "y": 1.164,
+      "before": 1.184,
+      "kept": 98.3,
+      "clean": {
+       "concept": 1.158,
+       "instruction": 1.768,
+       "fluency": 0.92
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.483,
+      "y": 0.348,
+      "before": 1.204,
+      "kept": 28.9,
+      "clean": {
+       "concept": 1.216,
+       "instruction": 1.976,
+       "fluency": 1.44
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.306,
+      "y": 0.56,
+      "before": 0.894,
+      "kept": 62.6,
+      "clean": {
+       "concept": 0.896,
+       "instruction": 1.958,
+       "fluency": 1.492
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.891,
+      "y": 0.446,
+      "before": 0.568,
+      "kept": 78.5,
+      "clean": {
+       "concept": 0.548,
+       "instruction": 1.966,
+       "fluency": 0.966
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.771,
+      "y": 0.314,
+      "before": 0.4,
+      "kept": 78.5,
+      "clean": {
+       "concept": 0.408,
+       "instruction": 1.96,
+       "fluency": 1.076
+      }
+     }
+    ]
+   }
+  },
+  "gepa": {
+   "label": "Black-box: GEPA, 8 proposals",
+   "panels": {
+    "pythia": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.226,
+      "before": 1.334,
+      "kept": 91.9,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "NL Steering",
+      "ours": true,
+      "x": 1.192,
+      "y": 1.024,
+      "before": 1.158,
+      "kept": 88.4,
+      "clean": {
+       "concept": 1.158,
+       "instruction": 1.768,
+       "fluency": 0.92
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 0.835,
+      "y": 0.34,
+      "before": 0.45,
+      "kept": 75.6,
+      "clean": {
+       "concept": 0.45,
+       "instruction": 1.852,
+       "fluency": 1.202
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.158,
+      "y": 0.592,
+      "before": 0.842,
+      "kept": 70.3,
+      "clean": {
+       "concept": 0.842,
+       "instruction": 1.872,
+       "fluency": 1.15
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.805,
+      "y": 0.356,
+      "before": 0.5,
+      "kept": 71.2,
+      "clean": {
+       "concept": 0.5,
+       "instruction": 1.876,
+       "fluency": 0.838
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.699,
+      "y": 0.224,
+      "before": 0.362,
+      "kept": 61.9,
+      "clean": {
+       "concept": 0.362,
+       "instruction": 1.864,
+       "fluency": 1.008
+      }
+     },
+     {
+      "method": "Prompt SFT",
+      "ours": false,
+      "x": 1.469,
+      "y": 1.414,
+      "before": 1.664,
+      "kept": 85.0,
+      "clean": {
+       "concept": 1.664,
+       "instruction": 1.96,
+       "fluency": 1.074
+      }
+     },
+     {
+      "method": "SteerLM SFT",
+      "ours": false,
+      "x": 1.334,
+      "y": 0.924,
+      "before": 1.26,
+      "kept": 73.3,
+      "clean": {
+       "concept": 1.26,
+       "instruction": 1.954,
+       "fluency": 1.06
+      }
+     }
+    ],
+    "qwen": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.226,
+      "before": 1.334,
+      "kept": 91.9,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "NL Steering",
+      "ours": true,
+      "x": 1.192,
+      "y": 1.024,
+      "before": 1.158,
+      "kept": 88.4,
+      "clean": {
+       "concept": 1.158,
+       "instruction": 1.768,
+       "fluency": 0.92
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.533,
+      "y": 0.318,
+      "before": 1.238,
+      "kept": 25.7,
+      "clean": {
+       "concept": 1.238,
+       "instruction": 1.972,
+       "fluency": 1.558
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.367,
+      "y": 0.514,
+      "before": 0.946,
+      "kept": 54.3,
+      "clean": {
+       "concept": 0.946,
+       "instruction": 1.942,
+       "fluency": 1.608
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 1.012,
+      "y": 0.732,
+      "before": 0.87,
+      "kept": 84.1,
+      "clean": {
+       "concept": 0.87,
+       "instruction": 1.588,
+       "fluency": 0.844
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.73,
+      "y": 0.204,
+      "before": 0.354,
+      "kept": 57.6,
+      "clean": {
+       "concept": 0.354,
+       "instruction": 1.986,
+       "fluency": 1.284
+      }
+     }
+    ],
+    "smollm3": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.226,
+      "before": 1.334,
+      "kept": 91.9,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "NL Steering",
+      "ours": true,
+      "x": 1.192,
+      "y": 1.024,
+      "before": 1.158,
+      "kept": 88.4,
+      "clean": {
+       "concept": 1.158,
+       "instruction": 1.768,
+       "fluency": 0.92
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.483,
+      "y": 0.236,
+      "before": 1.216,
+      "kept": 19.4,
+      "clean": {
+       "concept": 1.216,
+       "instruction": 1.976,
+       "fluency": 1.44
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.306,
+      "y": 0.524,
+      "before": 0.896,
+      "kept": 58.5,
+      "clean": {
+       "concept": 0.896,
+       "instruction": 1.958,
+       "fluency": 1.492
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.891,
+      "y": 0.412,
+      "before": 0.548,
+      "kept": 75.2,
+      "clean": {
+       "concept": 0.548,
+       "instruction": 1.966,
+       "fluency": 0.966
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.771,
+      "y": 0.282,
+      "before": 0.408,
+      "kept": 69.1,
+      "clean": {
+       "concept": 0.408,
+       "instruction": 1.96,
+       "fluency": 1.076
+      }
+     }
+    ]
+   }
+  },
+  "free": {
+   "label": "White-box: free soft prompts",
+   "panels": {
+    "pythia": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.06,
+      "before": 1.302,
+      "kept": 81.4,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 0.835,
+      "y": 0.4,
+      "before": 0.45,
+      "kept": 88.0,
+      "clean": {
+       "concept": 0.45,
+       "instruction": 1.852,
+       "fluency": 1.202
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.158,
+      "y": 0.31,
+      "before": 0.85,
+      "kept": 37.0,
+      "clean": {
+       "concept": 0.842,
+       "instruction": 1.872,
+       "fluency": 1.15
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.805,
+      "y": 0.41,
+      "before": 0.48,
+      "kept": 86.0,
+      "clean": {
+       "concept": 0.5,
+       "instruction": 1.876,
+       "fluency": 0.838
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.699,
+      "y": 0.33,
+      "before": 0.32,
+      "kept": 104.0,
+      "clean": {
+       "concept": 0.362,
+       "instruction": 1.864,
+       "fluency": 1.008
+      }
+     },
+     {
+      "method": "Prompt SFT",
+      "ours": false,
+      "x": 1.469,
+      "y": 0.56,
+      "before": 1.66,
+      "kept": 33.0,
+      "clean": {
+       "concept": 1.664,
+       "instruction": 1.96,
+       "fluency": 1.074
+      }
+     },
+     {
+      "method": "SteerLM SFT",
+      "ours": false,
+      "x": 1.334,
+      "y": 0.44,
+      "before": 1.23,
+      "kept": 36.0,
+      "clean": {
+       "concept": 1.26,
+       "instruction": 1.954,
+       "fluency": 1.06
+      }
+     }
+    ],
+    "qwen": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.06,
+      "before": 1.302,
+      "kept": 81.4,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.533,
+      "y": 0.56,
+      "before": 1.25,
+      "kept": 45.0,
+      "clean": {
+       "concept": 1.238,
+       "instruction": 1.972,
+       "fluency": 1.558
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.367,
+      "y": 0.39,
+      "before": 0.95,
+      "kept": 41.0,
+      "clean": {
+       "concept": 0.946,
+       "instruction": 1.942,
+       "fluency": 1.608
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 1.012,
+      "y": 0.59,
+      "before": 0.89,
+      "kept": 67.0,
+      "clean": {
+       "concept": 0.87,
+       "instruction": 1.588,
+       "fluency": 0.844
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.73,
+      "y": 0.37,
+      "before": 0.36,
+      "kept": 102.0,
+      "clean": {
+       "concept": 0.354,
+       "instruction": 1.986,
+       "fluency": 1.284
+      }
+     }
+    ],
+    "smollm3": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.06,
+      "before": 1.302,
+      "kept": 81.4,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.483,
+      "y": 0.41,
+      "before": 1.22,
+      "kept": 34.0,
+      "clean": {
+       "concept": 1.216,
+       "instruction": 1.976,
+       "fluency": 1.44
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.306,
+      "y": 0.29,
+      "before": 0.9,
+      "kept": 32.0,
+      "clean": {
+       "concept": 0.896,
+       "instruction": 1.958,
+       "fluency": 1.492
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.891,
+      "y": 0.31,
+      "before": 0.58,
+      "kept": 54.0,
+      "clean": {
+       "concept": 0.548,
+       "instruction": 1.966,
+       "fluency": 0.966
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.771,
+      "y": 0.32,
+      "before": 0.4,
+      "kept": 82.0,
+      "clean": {
+       "concept": 0.408,
+       "instruction": 1.96,
+       "fluency": 1.076
+      }
+     }
+    ]
+   }
+  },
+  "hull": {
+   "label": "White-box: mixtures of real tokens",
+   "panels": {
+    "pythia": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.238,
+      "before": 1.36,
+      "kept": 91.0,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 0.835,
+      "y": 0.39,
+      "before": 0.45,
+      "kept": 87.0,
+      "clean": {
+       "concept": 0.45,
+       "instruction": 1.852,
+       "fluency": 1.202
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.158,
+      "y": 0.35,
+      "before": 0.84,
+      "kept": 42.0,
+      "clean": {
+       "concept": 0.842,
+       "instruction": 1.872,
+       "fluency": 1.15
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.805,
+      "y": 0.46,
+      "before": 0.51,
+      "kept": 90.0,
+      "clean": {
+       "concept": 0.5,
+       "instruction": 1.876,
+       "fluency": 0.838
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.699,
+      "y": 0.32,
+      "before": 0.32,
+      "kept": 99.0,
+      "clean": {
+       "concept": 0.362,
+       "instruction": 1.864,
+       "fluency": 1.008
+      }
+     },
+     {
+      "method": "Prompt SFT",
+      "ours": false,
+      "x": 1.469,
+      "y": 0.56,
+      "before": 1.68,
+      "kept": 33.0,
+      "clean": {
+       "concept": 1.664,
+       "instruction": 1.96,
+       "fluency": 1.074
+      }
+     },
+     {
+      "method": "SteerLM SFT",
+      "ours": false,
+      "x": 1.334,
+      "y": 0.51,
+      "before": 1.22,
+      "kept": 42.0,
+      "clean": {
+       "concept": 1.26,
+       "instruction": 1.954,
+       "fluency": 1.06
+      }
+     }
+    ],
+    "qwen": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.238,
+      "before": 1.36,
+      "kept": 91.0,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.533,
+      "y": 0.63,
+      "before": 1.25,
+      "kept": 51.0,
+      "clean": {
+       "concept": 1.238,
+       "instruction": 1.972,
+       "fluency": 1.558
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.367,
+      "y": 0.46,
+      "before": 0.95,
+      "kept": 48.0,
+      "clean": {
+       "concept": 0.946,
+       "instruction": 1.942,
+       "fluency": 1.608
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 1.012,
+      "y": 0.81,
+      "before": 0.87,
+      "kept": 93.0,
+      "clean": {
+       "concept": 0.87,
+       "instruction": 1.588,
+       "fluency": 0.844
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.73,
+      "y": 0.4,
+      "before": 0.37,
+      "kept": 109.0,
+      "clean": {
+       "concept": 0.354,
+       "instruction": 1.986,
+       "fluency": 1.284
+      }
+     }
+    ],
+    "smollm3": [
+     {
+      "method": "Conditioning",
+      "ours": true,
+      "x": 1.258,
+      "y": 1.238,
+      "before": 1.36,
+      "kept": 91.0,
+      "clean": {
+       "concept": 1.334,
+       "instruction": 1.81,
+       "fluency": 0.924
+      }
+     },
+     {
+      "method": "Prompting",
+      "ours": false,
+      "x": 1.483,
+      "y": 0.61,
+      "before": 1.21,
+      "kept": 50.0,
+      "clean": {
+       "concept": 1.216,
+       "instruction": 1.976,
+       "fluency": 1.44
+      }
+     },
+     {
+      "method": "LoRA",
+      "ours": false,
+      "x": 1.306,
+      "y": 0.5,
+      "before": 0.91,
+      "kept": 55.0,
+      "clean": {
+       "concept": 0.896,
+       "instruction": 1.958,
+       "fluency": 1.492
+      }
+     },
+     {
+      "method": "DiffMean",
+      "ours": false,
+      "x": 0.891,
+      "y": 0.51,
+      "before": 0.57,
+      "kept": 90.0,
+      "clean": {
+       "concept": 0.548,
+       "instruction": 1.966,
+       "fluency": 0.966
+      }
+     },
+     {
+      "method": "LinearProbe",
+      "ours": false,
+      "x": 0.771,
+      "y": 0.43,
+      "before": 0.42,
+      "kept": 101.0,
+      "clean": {
+       "concept": 0.408,
+       "instruction": 1.96,
+       "fluency": 1.076
+      }
+     }
+    ]
+   }
+  }
+ },
+ "meta": {
+  "x": "harmonic mean of the mean concept, instruction and fluency scores (0-2) at the operating point, no attack (GEPA run, budget 0)",
+  "y": "mean concept score (0-2) after the attack",
+  "n_concepts": 50,
+  "sources": [
+   "figdata/gepa_rl.json",
+   "figdata/softprompt.json"
+  ],
+  "script": "figdata/scripts/web_summary.py"
+ }
+}

@@ -406,3 +406,13 @@ body { overflow-x: clip; }
 .fig1[data-step="4"] .fchip.a-row { box-shadow: inset 0 0 0 2px #2a78d6; }
 .fig1-mask-ax { font: italic 8.5px "Noto Sans", sans-serif; fill: #7a7a7a; }
 .tldr-lead { margin: 0 auto 1rem !important; }
+/* Results: headings, chips and chart boxes share one 980px column; text keeps an 820px measure on its left edge.
+   A wider gap and a larger heading mark the break between results; the robustness band hugs that column. */
+.result { margin-top: 4.5rem; }
+.result:first-of-type { margin-top: 0.75rem; }
+.result-kicker, .result h3, .subresult h4, .result .ifig { max-width: 980px; }
+.result-kicker { font-size: 0.8rem; margin-bottom: 0.3rem; }
+.result h3 { font-size: 1.3rem; margin-bottom: 0.6rem; }
+.result .figure-note, .group-intro { max-width: 820px; margin-left: max(0px, calc((100% - 980px) / 2)); margin-right: auto; }
+.result-group { max-width: calc(980px + 4rem); margin-left: auto; margin-right: auto; padding: 2.25rem 2rem 2rem; background: #eef2f6; }
+@media (max-width: 640px) { .result-group { padding: 1.5rem 0.9rem; } }

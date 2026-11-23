@@ -549,6 +549,7 @@ body { overflow-x: clip; }
 .lang-switch { position: absolute; top: 0.9rem; right: 1.1rem; z-index: 5; font: 0.82rem "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif; color: #363636; background: #fff; border: 1px solid #dbe3ea; border-radius: 999px; padding: 0.12rem 0.75rem; }
 .lang-switch:hover { border-color: #0072b2; color: #0072b2; }
 .zh-subtitle { margin: -0.4rem auto 0.9rem; font: 500 1.05rem "Noto Sans", "PingFang SC", "Microsoft YaHei", sans-serif; color: #52514e; }
-:lang(zh) .rx-concept::before { content: "引导目标  "; }
+:lang(zh) .rx-concept::before { content: "Steer 目标  "; }
 :lang(zh) .rx-instruction::before { content: "指令："; }
 :lang(zh) .result-kicker, :lang(zh) .f5-head, :lang(zh) .sva-head, :lang(zh) .sva-target-lab, :lang(zh) .svb-lab { letter-spacing: 0.02em; }
+:lang(zh) .result-kicker, :lang(zh) .f5-head, :lang(zh) .sva-head, :lang(zh) .sva-target-lab, :lang(zh) .svb-lab, :lang(zh) .attack-tag, :lang(zh) .rx-concept::before { text-transform: none; }

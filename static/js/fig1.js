@@ -22,7 +22,7 @@
   };
   const pre = fig.querySelector(".fig1-pre"), steer = fig.querySelector(".fig1-steer");
   const capStep = fig.querySelector(".fig1-cap-step"), capText = fig.querySelector(".fig1-cap-text");
-  const play = fig.querySelector(".fig1-play");
+  const plays = fig.querySelectorAll(".fig1-play"), cap = fig.querySelector(".fig1-caption");
   const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let mode = "pretrain", step = 0, timer = null;
   const last = () => CAPTION[mode].length - 1;
@@ -30,6 +30,7 @@
   function render(scroll) {
     fig.dataset.mode = mode;
     fig.dataset.step = String(step);
+    document.body.classList.toggle("fig1-walking", step > 0);  // hides the scroll-to-top button behind the pinned caption
     pre.hidden = mode !== "pretrain";
     steer.hidden = mode !== "steer";
     pre.querySelectorAll("[data-step]").forEach((el) => el.classList.toggle("is-active", step > 0 && el.dataset.step === String(step)));
@@ -41,26 +42,31 @@
     });
     capStep.textContent = step ? `${step} / ${last()}` : "";
     capText.textContent = CAPTION[mode][step];
+    // While walking, the caption is pinned to the bottom of the screen; keep the active card in the space above it.
     if (scroll && step) {
       const target = mode === "pretrain" ? pre.querySelector(`[data-step="${step}"]`) : steer;
-      const r = target.getBoundingClientRect();
-      if (r.top < 0 || r.bottom > window.innerHeight) target.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" });
+      const r = target.getBoundingClientRect(), room = window.innerHeight - cap.offsetHeight - 24;
+      if (r.top < 0 || r.bottom > room) {
+        const y = window.scrollY + r.top - (r.height > room ? 12 : room - r.height);
+        window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
+      }
     }
   }
-  function stop() { clearInterval(timer); timer = null; play.textContent = "▶ Walk me through it"; }
+  const label = (b, on) => (b.textContent = b.classList.contains("fig1-cap-btn") ? (on ? "❚❚" : "▶") : (on ? "❚❚ Pause" : "▶ Walk me through it"));
+  function stop() { clearInterval(timer); timer = null; plays.forEach((b) => label(b, false)); }
   function go(k, scroll = true) { step = Math.max(0, Math.min(last(), k)); render(scroll); }
 
-  fig.querySelector(".fig1-prev").addEventListener("click", () => { stop(); go(step - 1); });
-  fig.querySelector(".fig1-next").addEventListener("click", () => { stop(); go(step + 1); });
-  play.addEventListener("click", () => {
+  fig.querySelectorAll(".fig1-prev").forEach((b) => b.addEventListener("click", () => { stop(); go(step - 1); }));
+  fig.querySelectorAll(".fig1-next").forEach((b) => b.addEventListener("click", () => { stop(); go(step + 1); }));
+  plays.forEach((p) => p.addEventListener("click", () => {
     if (timer) return stop();
-    play.textContent = "❚❚ Pause";
+    plays.forEach((b) => label(b, true));
     go(step >= last() ? 1 : step + 1);
     timer = setInterval(() => {
       if (step >= last()) { stop(); go(0, false); return; }
       go(step + 1);
     }, 4500);
-  });
+  }));
   fig.querySelectorAll(".fig1-modes [data-mode]").forEach((b) => b.addEventListener("click", () => {
     stop(); mode = b.dataset.mode; step = 0; render(false);
   }));

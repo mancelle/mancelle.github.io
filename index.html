@@ -40,17 +40,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=20261122g">
-  <link rel="stylesheet" href="static/css/site.css?v=20261122g">
+  <link rel="stylesheet" href="static/css/index.css?v=20261123f">
+  <link rel="stylesheet" href="static/css/site.css?v=20261123f">
 
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/index.js?v=20261122g"></script>
-  <script type="module" src="static/js/demo.js?v=20261122g"></script>
-  <script defer src="static/js/fig_replies.js?v=20261122g"></script>
-  <script defer src="static/js/fig_plane.js?v=20261122g"></script>
-  <script defer src="static/js/fig_dumbbell.js?v=20261122g"></script>
-  <script defer src="static/js/fig_summary.js?v=20261122g"></script>
-  <script defer src="static/js/fig1.js?v=20261122g"></script>
+  <script defer src="static/js/index.js?v=20261123f"></script>
+  <script type="module" src="static/js/demo.js?v=20261123f"></script>
+  <script defer src="static/js/fig_replies.js?v=20261123f"></script>
+  <script defer src="static/js/fig_plane.js?v=20261123f"></script>
+  <script defer src="static/js/fig_dumbbell.js?v=20261123f"></script>
+  <script defer src="static/js/fig_summary.js?v=20261123f"></script>
+  <script defer src="static/js/fig1.js?v=20261123f"></script>
 </head>
 <body>
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
@@ -544,9 +544,9 @@
               <div class="f5-out">predicts<span>next token</span><span>next-segment features</span></div>
             </div>
             <ul class="fig1-facts fig1-facts-grid">
+              <li>Encoder input: one token per selected unit (here 12 positive in orange, 6 negative in gray). One embedding per unit; negative units add a learned <b>negative embedding</b>, like a positional embedding</li>
               <li>Encoder-decoder transformer: <b>27 + 27 layers</b>, width 1,664, <b>2.99B</b> parameters</li>
-              <li>One embedding per unit; negative units add a learned <b>negative embedding</b>, like a positional embedding</li>
-              <li><b>Block-diagonal masks</b>: decoder positions in segment <i>j</i> cross-attend only to its signal, in every decoder layer; nothing flows back</li>
+              <li><b>Cross-attention, own segment only</b> (block-diagonal masks): the text of each segment reads only that segment&rsquo;s signal (segment 2 reads only f<sub>2</sub>), in every decoder layer; nothing flows back</li>
               <li>Loss = next-token prediction <b>+ 0.1 &times;</b> next-segment feature prediction, from a head on the final decoder layer, max-pooled over the segment</li>
             </ul>
           </section>
@@ -618,7 +618,12 @@
               </ul>
             </section>
           </div>
-          <p class="fig1-caption" aria-live="polite"><span class="fig1-cap-step"></span><span class="fig1-cap-text"></span></p>
+          <div class="fig1-caption">
+            <button type="button" class="fig1-prev fig1-cap-btn" aria-label="Previous step">&#8249;</button>
+            <p class="fig1-cap-body" aria-live="polite"><span class="fig1-cap-step"></span><span class="fig1-cap-text"></span></p>
+            <button type="button" class="fig1-play fig1-cap-btn" aria-label="Play or pause">&#9654;</button>
+            <button type="button" class="fig1-next fig1-cap-btn" aria-label="Next step">&#8250;</button>
+          </div>
         </figure>
       </div>
     </div>
@@ -658,20 +663,23 @@
             <div class="box demo-card is-steered" id="demo-card-mancelle">
               <div class="demo-card-head"><span class="demo-card-title">Mancelle-3B</span><span class="demo-card-sub">steered through the control channel</span></div>
               <details class="demo-suffix" open><summary>Attack suffix <span class="demo-suffix-source"></span></summary><code></code></details>
+              <div class="demo-score" hidden></div>
               <div class="demo-reply"></div>
-              <div class="demo-clean" hidden><span class="label-sm">Without the attack</span><div class="demo-reply-clean"></div></div>
+              <div class="demo-clean" hidden><div class="demo-clean-head"><span class="label-sm">Without the attack</span><span class="demo-score is-small" hidden></span></div><div class="demo-reply-clean"></div></div>
             </div>
           </div>
           <div class="column">
             <div class="box demo-card is-base" id="demo-card-qwen">
               <div class="demo-card-head"><span class="demo-card-title">Qwen2.5-3B-Instruct</span><span class="demo-card-sub">steered by a prompt</span></div>
               <details class="demo-suffix" open><summary>Attack suffix <span class="demo-suffix-source"></span></summary><code></code></details>
+              <div class="demo-score" hidden></div>
               <div class="demo-reply"></div>
-              <div class="demo-clean" hidden><span class="label-sm">Without the attack</span><div class="demo-reply-clean"></div></div>
+              <div class="demo-clean" hidden><div class="demo-clean-head"><span class="label-sm">Without the attack</span><span class="demo-score is-small" hidden></span></div><div class="demo-reply-clean"></div></div>
             </div>
           </div>
         </div>
         <p class="demo-foot">The RL and GEPA suffixes are the ones the paper&rsquo;s attackers found against each model for the chosen concept (Mancelle-3B&rsquo;s RL suffixes come from the public-release rerun). Runs on a shared Hugging Face GPU, so a request may wait in a queue. The full demo is also on <a href="https://huggingface.co/spaces/liuyanchen1015/mancelle-demo" target="_blank">Hugging Face</a>.</p>
+        <p class="demo-foot" id="demo-score-note" hidden>Concept scores (0&ndash;2) are estimates from the local judge that rewarded the paper&rsquo;s RL attacker, Qwen3-4B-Instruct fine-tuned on gpt-5.6-luna ratings. The paper&rsquo;s numbers come from gpt-5.6-luna.</p>
       </div>
     </div>
   </section>
@@ -714,7 +722,8 @@
           <svg class="ifig-plot" viewBox="0 0 540 540" role="img" aria-label="For every method, the AxBench score without the attack against the concept score without and under the attack"></svg>
           <div class="ifig-tip" hidden></div>
         </div>
-        <p class="figure-note">Each point is one steering method at the single strength every attack uses. Horizontal: the AxBench score without the attack, the harmonic mean of the mean concept, instruction and fluency scores. Vertical: the concept score, without the attack (hollow) and under the attack (filled). The first two attacks are black-box suffixes, the last two white-box soft prompts. Mancelle-3B is the same in every host panel.</p>
+        <p class="sm-caveat" hidden><b>* The comparison favors Prompt SFT:</b> it receives the concept in the same form in training and evaluation, whereas Mancelle-3B is trained on conditioning signals extracted from the reply itself.</p>
+        <p class="figure-note">Each point is one steering method at the single strength every attack uses. Horizontal: the AxBench score without the attack, the harmonic mean of the mean concept, instruction and fluency scores. Vertical: the concept score, without the attack (short bar) and under the attack (marker). The first two attacks are black-box suffixes, the last two white-box soft prompts. Mancelle-3B is the same in every host panel.</p>
       </div>
       <div class="result">
         <div class="result-kicker">Clean steering</div>
@@ -733,7 +742,7 @@
           <div class="pl-legend"></div>
           <div class="ifig-tip" hidden></div>
         </div>
-        <p class="figure-note">Against Pythia-2.8B, Mancelle-3B steers more strongly than the four post-hoc methods; DiffMean comes close only at strengths where its quality has collapsed. Of the two baselines finetuned on our steered data, SteerLM SFT steers less strongly and Prompt SFT more strongly, but both are less robust to adversarial prompts. Against Qwen2.5-3B and SmolLM3-3B, we reach comparable steering to the strong prompting baseline with less than 5% of the training tokens, though we lag in overall quality.</p>
+        <p class="figure-note">Against Pythia-2.8B, Mancelle-3B steers more strongly than the four post-hoc methods; DiffMean comes close only at strengths where its quality has collapsed. Of the two baselines finetuned on our steered data, SteerLM SFT steers less strongly and Prompt SFT, which the comparison favors, more strongly, but both are less robust to adversarial prompts. Against Qwen2.5-3B and SmolLM3-3B, we reach comparable steering to the strong prompting baseline with less than 5% of the training tokens, though we lag in overall quality.</p>
       </div>
       <div class="result result-group">
         <div class="result-kicker">Robustness</div>

@@ -1,5 +1,5 @@
 // Summary scatter at the top of Results: per method, the AxBench score without the attack (x) against the concept score
-// (y), hollow without the attack and filled under it. <div class="sm" data-src="static/data/fig_summary.json"> with
+// (y), a short bar without the attack and a marker under it. <div class="sm" data-src="static/data/fig_summary.json"> with
 // attack and host tabs; method names are placed next to their points, nudged until they do not overlap.
 (function () {
   const NS = "http://www.w3.org/2000/svg";
@@ -20,8 +20,8 @@
   };
   const txt = (parent, attrs, s) => { const t = el("text", attrs, parent); t.textContent = s; return t; };
   function marker(st, x, y, parent) {
-    const fill = st.hollow ? "#fff" : st.color, s = 6;
-    if (!st.shape) return el("circle", { cx: x, cy: y, r: 6.5, fill, stroke: st.hollow ? st.color : "#fff", "stroke-width": st.hollow ? 2.2 : 1.5 }, parent);
+    const fill = st.hollow ? "#fff" : st.color, s = 5.5;
+    if (!st.shape) return el("circle", { cx: x, cy: y, r: 5.5, fill, stroke: st.hollow ? st.color : "#fff", "stroke-width": st.hollow ? 2.2 : 1.5 }, parent);
     const d = st.shape === "square" ? `M${x - s},${y - s}h${2 * s}v${2 * s}h${-2 * s}Z`
       : st.shape === "triangle" ? `M${x},${y - s - 1}L${x + s + 1},${y + s}L${x - s - 1},${y + s}Z`
       : st.shape === "cross" ? `M${x - s},${y - 2}h${s - 2}v${-(s - 2)}h4v${s - 2}h${s - 2}v4h${-(s - 2)}v${s - 2}h-4v${-(s - 2)}h${-(s - 2)}Z`
@@ -33,6 +33,7 @@
   function init(root) {
     const svg = root.querySelector("svg");
     const tip = root.querySelector(".ifig-tip");
+    const caveat = root.parentElement.querySelector(".sm-caveat");
     let data, host = root.querySelector("[data-panel].is-active")?.dataset.panel, attack = root.querySelector("[data-attack-kind].is-active")?.dataset.attackKind;
 
     function showTip(evt, p, label) {
@@ -42,6 +43,7 @@
       add("ifig-tip-row", `AxBench score without the attack ${p.x.toFixed(2)}`);
       add("ifig-tip-row muted", `concept ${p.clean.concept.toFixed(2)} · instruction ${p.clean.instruction.toFixed(2)} · fluency ${p.clean.fluency.toFixed(2)}`);
       add("ifig-tip-row", `Concept ${p.before.toFixed(2)} → ${p.y.toFixed(2)} under the attack (kept ${p.kept.toFixed(0)}%)`);
+      if (p.method === "Prompt SFT") add("ifig-tip-row muted", "* favored by this comparison (see the note below the chart)");
       add("ifig-tip-sub", data.attacks[attack].label);
       const b = root.getBoundingClientRect(); tip.hidden = false;
       tip.style.left = Math.max(4, Math.min(evt.clientX - b.left + 14, b.width - tip.offsetWidth - 8)) + "px";
@@ -52,6 +54,7 @@
       tip.hidden = true;
       svg.textContent = "";
       const pts = data.attacks[attack].panels[host];
+      if (caveat) caveat.hidden = !pts.some((p) => p.method === "Prompt SFT");
       const narrow = root.clientWidth > 0 && root.clientWidth < 560;
       const W = narrow ? 340 : 540, L = narrow ? 40 : 52, R = narrow ? 10 : 24, T = 30, B = narrow ? 62 : 56, H = T + B + (W - L - R);
       svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
@@ -69,7 +72,7 @@
       txt(svg, { x: 12, y: (Y(Y0) + Y(Y1)) / 2, class: "ifig-axis", "text-anchor": "middle", transform: `rotate(-90 12 ${(Y(Y0) + Y(Y1)) / 2})` }, "Concept score →");
       txt(svg, { x: X(X1) - 4, y: Y(Y1) + 14, class: "sm-better", "text-anchor": "end" }, "better ↗");
       // key for the two marks
-      el("circle", { cx: L + 6, cy: 12, r: 5, fill: "#fff", stroke: "#52514e", "stroke-width": 1.5 }, svg);
+      el("line", { x1: L, x2: L + 12, y1: 12, y2: 12, stroke: "#52514e", "stroke-width": 2.5, "stroke-linecap": "round" }, svg);
       txt(svg, { x: L + 16, y: 16, class: "ifig-tick" }, "without the attack");
       el("circle", { cx: L + (narrow ? 132 : 146), cy: 12, r: 5, fill: "#52514e" }, svg);
       txt(svg, { x: L + (narrow ? 142 : 156), y: 16, class: "ifig-tick" }, "under the attack");
@@ -78,7 +81,7 @@
       const boxes = [{ x: X(X1) - 60, y: Y(Y1), w: 60, h: 20 }];
       const pos = pts.map((p) => ({ p, st: STYLE[p.method] || { color: GRAY }, cx: X(p.x), cy: Y(p.y), by: Y(p.before) }));
       for (const q of pos) {
-        boxes.push({ x: q.cx - 8, y: q.cy - 8, w: 16, h: 16 }, { x: q.cx - 6, y: q.by - 6, w: 12, h: 12 });
+        boxes.push({ x: q.cx - 8, y: q.cy - 8, w: 16, h: 16 }, { x: q.cx - 7, y: q.by - 3, w: 14, h: 6 });
         boxes.push({ x: q.cx - 2, y: Math.min(q.cy, q.by), w: 4, h: Math.abs(q.cy - q.by) });
       }
       const layer = el("g", {}, svg), labels = el("g", {}, svg);
@@ -88,7 +91,7 @@
         const g = el("g", { class: "ifig-point", tabindex: 0 }, layer);
         el("rect", { x: cx - 12, y: Math.min(cy, by) - 12, width: 24, height: Math.abs(cy - by) + 24, fill: "transparent" }, g);
         el("line", { x1: cx, x2: cx, y1: by, y2: cy, stroke: st.color, "stroke-width": 2, "stroke-opacity": 0.3 }, g);
-        el("circle", { cx, cy: by, r: 4.5, fill: "#fff", stroke: st.color, "stroke-width": 1.5, "stroke-opacity": 0.8 }, g);
+        el("line", { x1: cx - 6, x2: cx + 6, y1: by, y2: by, stroke: st.color, "stroke-width": 2.5, "stroke-linecap": "round", "stroke-opacity": 0.75 }, g);
         marker(st, cx, cy, g);
         g.addEventListener("pointermove", (e) => showTip(e, p, label));
         g.addEventListener("pointerleave", () => (tip.hidden = true));
@@ -97,7 +100,7 @@
       }
       // ours first, so their labels get the best spots
       for (const q of [...pos].sort((a, b) => b.p.ours - a.p.ours)) {
-        const name = q.p.ours ? `Mancelle · ${q.p.method}` : q.p.method;
+        const name = q.p.ours ? `Mancelle · ${q.p.method}` : q.p.method + (q.p.method === "Prompt SFT" ? " *" : "");
         const t = txt(labels, { class: "sm-label" + (q.p.ours ? " is-ours" : "") }, name);
         const w = t.getComputedTextLength(), h = 13;
         const cand = [[11, 4, "start"], [-11, 4, "end"], [11, -9, "start"], [11, 16, "start"], [-11, -9, "end"], [-11, 16, "end"], [0, -13, "middle"], [0, 22, "middle"], [11, -22, "start"], [11, 29, "start"]];

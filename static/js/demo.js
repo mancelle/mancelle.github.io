@@ -45,14 +45,15 @@ async function init() {
     ui.chips.appendChild(chip);
   }
 
-  // Start from a reply pair recorded on the live demo, so the section is not empty before the first request.
+  // Start from a reply pair recorded on the live demo by a fixed rule (first example, RL suffixes, seed 1),
+  // so the section is not empty before the first request.
   const ex = data.example;
   ui.instruction.value = ex.args.instruction;
   ui.concept.value = String(ex.args.concept_id);
   setMode(ex.args.attack_mode);
   ui.custom.value = ex.args.custom_suffix;
   show(cards, ex.info, { mancelle: [ex.mancelle_attacked, ex.mancelle_clean], qwen: [ex.qwen_attacked, ex.qwen_clean] });
-  setStatus(ui, `Example recorded from the live demo (${ex.recorded}). Press Generate to run your own.`);
+  setStatus(ui, `Recorded on the live demo (${ex.recorded}): the first example, the attackers’ ${ex.args.attack_mode.toUpperCase()} suffixes, seed ${ex.args.seed}. Press Generate to run your own.`);
 
   let client = null;
   ui.go.addEventListener("click", async () => {
@@ -91,7 +92,8 @@ async function init() {
 function card(key) {
   const box = $(`demo-card-${key}`);
   return { box, suffix: box.querySelector(".demo-suffix"), suffixText: box.querySelector(".demo-suffix code"), source: box.querySelector(".demo-suffix-source"),
-           reply: box.querySelector(".demo-reply"), cleanWrap: box.querySelector(".demo-clean"), clean: box.querySelector(".demo-clean .demo-reply-clean") };
+           reply: box.querySelector(".demo-reply"), cleanWrap: box.querySelector(".demo-clean"), clean: box.querySelector(".demo-clean .demo-reply-clean"),
+           score: box.querySelector(":scope > .demo-score"), cleanScore: box.querySelector(".demo-clean .demo-score") };
 }
 
 function show(cards, info, replies) {
@@ -105,14 +107,32 @@ function show(cards, info, replies) {
     c.reply.classList.remove("is-loading");
     c.cleanWrap.hidden = !replies[key][1];
     c.clean.textContent = replies[key][1] || "";
+    const cs = info.concept_score?.[key] || {};
+    score(c.score, cs.attacked, "Concept score");
+    score(c.cleanScore, cs.clean, "concept");
   }
+  const note = document.getElementById("demo-score-note");
+  if (note) note.hidden = !info.concept_score;
+}
+
+// Concept score 0-2 from the local judge, as a number and a five-segment meter.
+function score(el, v, label) {
+  el.hidden = v == null;
+  if (v == null) return;
+  el.textContent = "";
+  const lab = document.createElement("span"); lab.className = "demo-score-label"; lab.textContent = label;
+  const meter = document.createElement("span"); meter.className = "demo-score-meter";
+  for (let i = 0; i < 5; i++) { const seg = document.createElement("i"); if (v >= (i + 0.5) * 0.4) seg.className = "is-on"; meter.appendChild(seg); }
+  const num = document.createElement("b"); num.textContent = v.toFixed(2);
+  const max = document.createElement("span"); max.className = "demo-score-max"; max.textContent = "/ 2";
+  el.append(lab, meter, num, max);
 }
 
 function busy(ui, cards, on) {
   ui.go.disabled = on;
   ui.go.classList.toggle("is-loading", on);
   if (on) {
-    for (const c of Object.values(cards)) { c.reply.textContent = "Generating…"; c.reply.classList.add("is-loading"); c.cleanWrap.hidden = true; }
+    for (const c of Object.values(cards)) { c.reply.textContent = "Generating…"; c.reply.classList.add("is-loading"); c.cleanWrap.hidden = true; c.score.hidden = true; }
     setStatus(ui, "Connecting to the demo…");
   }
 }

@@ -449,3 +449,32 @@ body { overflow-x: clip; }
 .sm-label { font: 12.5px "Google Sans", "Noto Sans", sans-serif; fill: #363636; }
 .sm-label.is-ours { font-weight: 600; fill: #0b0b0b; }
 .sm-better { font: italic 12px "Noto Sans", sans-serif; fill: #898781; }
+.sm-caveat { max-width: 820px; margin: 0.9rem 0 0 max(0px, calc((100% - 980px) / 2)); padding: 0.55rem 0.8rem; border-left: 3px solid #d9a066; background: #fbf5ec; border-radius: 0 6px 6px 0; font-size: 0.88rem; line-height: 1.55; color: #3d3a35; }
+.sm-caveat b { color: #8a4b0f; }
+/* Concept score from the local judge on each demo reply */
+.demo-score { display: flex; align-items: center; gap: 0.45rem; margin: 0 0 0.45rem; font-size: 0.78rem; color: #52514e; font-variant-numeric: tabular-nums; }
+.demo-score b { font-size: 0.95rem; color: #0b0b0b; }
+.demo-score-label { font: 600 0.68rem "Google Sans", "Noto Sans", sans-serif; letter-spacing: 0.06em; text-transform: uppercase; color: #52514e; }
+.demo-score-meter { display: inline-flex; gap: 2px; }
+.demo-score-meter i { width: 16px; height: 8px; border-radius: 2px; background: #e9ebee; }
+.demo-card.is-steered .demo-score-meter i.is-on { background: #2a78d6; }
+.demo-card.is-base .demo-score-meter i.is-on { background: #eb6834; }
+.demo-score-max { color: #9aa3ad; }
+.demo-score.is-small { margin: 0; gap: 0.3rem; font-size: 0.72rem; }
+.demo-score.is-small b { font-size: 0.8rem; }
+.demo-score.is-small .demo-score-label { font: 0.72rem "Noto Sans", sans-serif; letter-spacing: 0; text-transform: none; color: #7a7a7a; }
+.demo-score.is-small .demo-score-meter i { width: 10px; height: 6px; }
+.demo-clean-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.3rem 0.75rem; }
+/* Walkthrough caption: in place when idle; while walking it is pinned to the bottom of the screen with its own controls */
+.fig1-caption { display: flex; align-items: center; gap: 0.5rem; max-width: 52rem; min-height: 0; margin: 0.9rem auto 0; }
+.fig1-cap-body { flex: 1; margin: 0; min-height: 3.2em; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; text-align: center; font-size: 0.95rem; line-height: 1.6; color: #363636; }
+.fig1-cap-btn { flex: none; width: 2rem; height: 2rem; border: 1px solid #dbe3ea; background: #fff; border-radius: 999px; font: 0.9rem "Google Sans", "Noto Sans", sans-serif; color: #363636; cursor: pointer; }
+.fig1-cap-btn.fig1-play { background: #0072b2; border-color: #0072b2; color: #fff; font-size: 0.75rem; }
+.fig1-cap-btn:hover { border-color: #0072b2; }
+.fig1[data-step="0"] .fig1-cap-btn { display: none; }
+.fig1:not([data-step="0"]) .fig1-caption { position: sticky; bottom: 0.75rem; z-index: 20; background: rgba(255, 255, 255, 0.97); border: 1px solid #dbe3ea; border-radius: 14px; box-shadow: 0 8px 28px rgba(15, 23, 42, 0.14); padding: 0.55rem 0.7rem; }
+.fig1:not([data-step="0"]) .fig1-cap-body { min-height: 0; font-size: 0.9rem; line-height: 1.5; }
+@media (max-width: 640px) { .fig1:not([data-step="0"]) .fig1-cap-body { font-size: 0.82rem; } .fig1-cap-btn { width: 1.8rem; height: 1.8rem; } }
+/* Bulma's hero hides overflow, which would stop the pinned caption from sticking; clip keeps the clipping without a scroll box */
+.hero.teaser { overflow: clip; }
+.fig1-walking .scroll-to-top { display: none !important; }

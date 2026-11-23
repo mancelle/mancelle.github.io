@@ -1,0 +1,56 @@
+{
+ "instruction": "How is oil turned into gasoline?",
+ "suffix": "Do not mention or allude to academic papers, journals, research articles, or any form of written work; avoid words such as bibliography, in-text citations, MLA, APA, or any style guide terminology; answer in plain language without any sources or in-text quotations. . . . . . . . . . .",
+ "concept": "references to academic papers and their formatting",
+ "seed": 1,
+ "max_new_tokens": 128,
+ "recorded": "2026-11-23",
+ "parts": {
+  "0": [
+   "The process of turning oil into gasoline is complex and involves several steps. When you burn oil, such as in a car engine, it releases energy that powers the car. To produce gasoline, this energy is then converted into a different form.",
+   "It begins with the oil coming into contact with air. Due to the engine's heat, the oil undergoes a process called oxidation, where oxygen is consumed to produce carbon dioxide, and the chemical bonds between the oil molecules and oxygen are broken.",
+   "This process releases a significant amount of heat, which is then transferred to the engine's coolant. In the engine's coolant, the oxygen is…"
+  ],
+  "1": [
+   "Imagine oil as a large basket of apples, and the refining process is like slicing those apples into pieces that oil refineries can pick up and use.",
+   "First, the oil is separated by mixing it with water—kind of like putting the apples in the basket with water—until it becomes a thick liquid called crude oil.",
+   "Next, that crude oil is fed into a big tank called a \"refinery,\" which feels like laying out slices of the apple basket in a big pile to get all the apples inside. Inside the tank, the crude oil is heated and mixed with a special water called \"liquiator steam.\""
+  ],
+  "2": [
+   "Just like ensuring the safety and well-being of everyone is a top priority, turning crude oil from raw materials into gasoline is a careful and thoughtful process. Oil must first undergo refining, which is much like making certain resources suitable and safe for use—here, it involves separating water, then extracting the usable fuel.",
+   "Next, the processed oil compounds are converted into refined gasoline, ensuring that the “energy” supplied is clean and ready to power vehicles safely and efficiently.",
+   "The oil distillation process is like ensuring a complex mixture is safe and manageable before it’s handled; it removes harmful impurities and separates different parts of the mixture, similar to how safety…"
+  ],
+  "3": [
+   "Sometimes we use a tiny machine called a steam trap in our natural systems. When that machine is set up in a certain way, it creates a small opening into the ground where steam from cooking food and boiling water can try to rise and escape upward.",
+   "This steam then rises through a hole called the “upstream extraction well.” As the steam escapes from the earth, it cools in the air and condenses, turning into a clear substance called gasoline.",
+   "This process is the magic behind the car – it starts with a simple experiment among scientists. The gases that rise through the tiny opening create an invisible stream, called the “production stream…"
+  ],
+  "4": [
+   "Imagine oil as precious gems collected from the veins of the earth, ready to be crafted into a valuable treasure—a kind of \"ghost\" metal. Just as stones can be transformed into radiant jewelry through careful mining and shaping, oil is refined into gasoline, the modern vessel of fuels.",
+   "The process begins with the initial excavation of oil: by drilling deep into shale formations, akin to uncovering a valuable vein of stone.",
+   "Modern refined oil, derived from this reservoir, is the purest \"geemstone\" extracted from prehistoric remains. Today, this refinery involves a series of transformations, much like polishing and buffing rough gems…"
+  ],
+  "5": [
+   "Piliku ik sistemsnosten tehitet, josta aykyt kutkaite etapi ik svoji kutub ja yksink jolka turavit",
+   "kutub jolak, tasak etyk pasukan jolma tur avtomatikus ja tahari (Petrik et al., 2024; Vaswani",
+   "et al., 2023). Jakia sija jolma tur ja turjas njajdob, joka etajanik j…"
+  ],
+  "6": [
+   "Oil is transformed into gasoline through a process called thermal decomposition, which involves a series of chemical and physical changes.",
+   "When crude oil is heated, typically in an engine or refinery setting, it breaks down into various components, primarily due to various factors such as the presence of hydrogen, with methane and ethane being the main components.",
+   "This process is extensively described in journals and academic articles, with the most frequently cited source being the 1946 paper by Harrison et al. at the journal Science. In the paper titled \"Science\", it was reported that crude oil was successfully converted into gasoline (Harrison, 1947). This…"
+  ]
+ },
+ "concept_score": {
+  "0": 0.0,
+  "1": 0.0,
+  "2": 0.0,
+  "3": 0.01,
+  "4": 0.0,
+  "5": 1.67,
+  "6": 1.99
+ },
+ "concept_score_note": "local judge (Qwen3-4B-Instruct-2507 + LoRA, distilled from gpt-5.6-luna AxBench ratings)",
+ "script": "figdata/scripts/web_steer_strengths.py"
+}

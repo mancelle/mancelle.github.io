@@ -70,5 +70,25 @@
   fig.querySelectorAll(".fig1-modes [data-mode]").forEach((b) => b.addEventListener("click", () => {
     stop(); mode = b.dataset.mode; step = 0; render(false);
   }));
+  // Steering view: the strength slider recolors the steered signals and swaps in the real reply at that strength.
+  const sva = fig.querySelector(".sv-a[data-src]");
+  if (sva) {
+    const slider = sva.querySelector(".sva-strength input"), val = sva.querySelector(".sva-strength b");
+    const score = sva.querySelector(".sva-score"), cells = [...sva.querySelectorAll(".sva-txt.is-reply")];
+    let steerData = null;
+    const show = () => {
+      const k = slider.value;
+      sva.style.setProperty("--t", k / 6);
+      val.textContent = k;
+      const how = k == 0 ? "the head’s prediction" : k == 6 ? "set by the target concept" : "prediction, moved toward the target";
+      sva.querySelectorAll(".sva-sig.is-steered em").forEach((e) => (e.textContent = how));
+      if (!steerData) return;
+      steerData.parts[k].forEach((t, i) => (cells[i].textContent = t));
+      const cs = steerData.concept_score?.[k];
+      score.textContent = cs == null ? "" : `concept score ${cs.toFixed(2)} / 2`;
+    };
+    slider.addEventListener("input", show);
+    fetch(sva.dataset.src).then((r) => r.json()).then((d) => { steerData = d; show(); }).catch(() => {});
+  }
   render(false);
 })();

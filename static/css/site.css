@@ -478,3 +478,9 @@ body { overflow-x: clip; }
 /* Bulma's hero hides overflow, which would stop the pinned caption from sticking; clip keeps the clipping without a scroll box */
 .hero.teaser { overflow: clip; }
 .fig1-walking .scroll-to-top { display: none !important; }
+/* Summary scatter: chart on the left edge of the column, its notes beside it; stacked on narrow screens */
+.sm-body { display: grid; grid-template-columns: minmax(0, 560px) minmax(0, 1fr); gap: 1rem 2rem; align-items: center; margin-top: 0.4rem; }
+.sm .sm-body .ifig-plot { max-width: 560px; margin: 0; }
+.sm-side .figure-note { max-width: none; margin: 0; }
+.sm-side .sm-caveat { max-width: none; margin: 0.9rem 0 0; }
+@media (max-width: 900px) { .sm-body { grid-template-columns: 1fr; } .sm .sm-body .ifig-plot { margin: 0 auto; } }

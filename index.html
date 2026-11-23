@@ -40,17 +40,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="static/css/bulma.min.css">
-  <link rel="stylesheet" href="static/css/index.css?v=20261123f">
-  <link rel="stylesheet" href="static/css/site.css?v=20261123f">
+  <link rel="stylesheet" href="static/css/index.css?v=20261123g">
+  <link rel="stylesheet" href="static/css/site.css?v=20261123g">
 
   <script defer src="static/js/fontawesome.all.min.js"></script>
-  <script defer src="static/js/index.js?v=20261123f"></script>
-  <script type="module" src="static/js/demo.js?v=20261123f"></script>
-  <script defer src="static/js/fig_replies.js?v=20261123f"></script>
-  <script defer src="static/js/fig_plane.js?v=20261123f"></script>
-  <script defer src="static/js/fig_dumbbell.js?v=20261123f"></script>
-  <script defer src="static/js/fig_summary.js?v=20261123f"></script>
-  <script defer src="static/js/fig1.js?v=20261123f"></script>
+  <script defer src="static/js/index.js?v=20261123g"></script>
+  <script type="module" src="static/js/demo.js?v=20261123g"></script>
+  <script defer src="static/js/fig_replies.js?v=20261123g"></script>
+  <script defer src="static/js/fig_plane.js?v=20261123g"></script>
+  <script defer src="static/js/fig_dumbbell.js?v=20261123g"></script>
+  <script defer src="static/js/fig_summary.js?v=20261123g"></script>
+  <script defer src="static/js/fig1.js?v=20261123g"></script>
 </head>
 <body>
   <button class="scroll-to-top" onclick="scrollToTop()" title="Scroll to top" aria-label="Scroll to top"><i class="fas fa-chevron-up"></i></button>
@@ -719,11 +719,15 @@
               </div>
             </div>
           </div>
-          <svg class="ifig-plot" viewBox="0 0 540 540" role="img" aria-label="For every method, the AxBench score without the attack against the concept score without and under the attack"></svg>
+          <div class="sm-body">
+            <svg class="ifig-plot" viewBox="0 0 540 540" role="img" aria-label="For every method, the AxBench score without the attack against the concept score without and under the attack"></svg>
+            <div class="sm-side">
+              <p class="figure-note">Each point is one steering method at the single strength every attack uses. Horizontal: the AxBench score without the attack, the harmonic mean of the mean concept, instruction and fluency scores. Vertical: the concept score, without the attack (short bar) and under the attack (marker). The first two attacks are black-box suffixes, the last two white-box soft prompts. Mancelle-3B is the same in every host panel.</p>
+              <p class="sm-caveat" hidden><b>* The comparison favors Prompt SFT:</b> it receives the concept in the same form in training and evaluation, whereas Mancelle-3B is trained on conditioning signals extracted from the reply itself.</p>
+            </div>
+          </div>
           <div class="ifig-tip" hidden></div>
         </div>
-        <p class="sm-caveat" hidden><b>* The comparison favors Prompt SFT:</b> it receives the concept in the same form in training and evaluation, whereas Mancelle-3B is trained on conditioning signals extracted from the reply itself.</p>
-        <p class="figure-note">Each point is one steering method at the single strength every attack uses. Horizontal: the AxBench score without the attack, the harmonic mean of the mean concept, instruction and fluency scores. Vertical: the concept score, without the attack (short bar) and under the attack (marker). The first two attacks are black-box suffixes, the last two white-box soft prompts. Mancelle-3B is the same in every host panel.</p>
       </div>
       <div class="result">
         <div class="result-kicker">Clean steering</div>

@@ -5,7 +5,7 @@
   if (!fig) return;
   const CAPTION = {
     pretrain: [
-      "We introduce conditional pretraining with a separate semantic control channel to build robustly controllable models.",
+      "Press ▶ to step through how Mancelle is trained, or switch to see how it is steered.",
       "Documents are tokenized and divided into segments.",
       "Segments are spliced to encourage reliance on conditioning signals over previous token context.",
       "SAE activations are extracted independently for each segment and max-pooled over token positions; filtering, clustering and selection produce a curated vocabulary of conditioning features.",

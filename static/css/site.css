@@ -382,3 +382,9 @@ body { overflow-x: clip; }
 .fig1-heat { max-width: 820px; margin: 0 auto; }
 .fig1-select { grid-template-columns: 1.2fr 1fr !important; }
 @media (max-width: 760px) { .fig1-split, .fig1-select { grid-template-columns: 1fr !important; } }
+/* Every step is a full-width row: drawing on the left, details on the right (no stretched empty cards) */
+.fig1-steps { grid-template-columns: 1fr !important; gap: 0.7rem; }
+.fig1-steps > .fig1-card { grid-column: auto; }
+.fig1-split-side { align-self: center; }
+.fig1-steps > [data-step="1"] .fig1-split, .fig1-steps > [data-step="2"] .fig1-split { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+.fig1-steps > [data-step="2"] .fig1-split-main { max-width: 460px; }

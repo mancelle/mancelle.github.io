@@ -105,13 +105,15 @@
           <div class="fig1-steps">
             <section class="fig1-card" data-step="1">
               <h4><span class="fig1-num">1</span>Segment</h4>
+              <div class="fig1-split"><div class="fig1-split-main">
               <p class="fig1-doc"><span class="seg s1">… parameterizing the points on the</span> <span class="seg s2">circles. The fact that the line connecting the points of tangency is <u class="a-phrase">tangent to both circles</u> <span class="fig1-a fig1-a-html" tabindex="0" title="The same example through steps 1, 3 and 4">A</span> gives us a condition on the angles: the line is perpendicular to</span> <span class="seg s3">the radii at the points of tangency.</span></p>
               <div class="fig1-docbar" aria-label="A 280-token document cut into segments of 128, 128 and 24 tokens"><span class="seg s1" style="flex:128">128</span><span class="seg s2" style="flex:128">128</span><span class="seg s3" style="flex:24">24</span></div>
               <p class="fig1-note fig1-center">a 280-token document: short tail segments are kept</p>
-              <ul class="fig1-facts"><li>FineWeb-Edu documents, cut into segments of <b>128 Gemma-3 tokens</b> (about 256 tokens for our tokenizer)</li></ul>
+              </div><div class="fig1-split-side"><ul class="fig1-facts"><li>FineWeb-Edu documents, cut into segments of <b>128 Gemma-3 tokens</b> (about 256 tokens for our tokenizer)</li></ul></div></div>
             </section>
             <section class="fig1-card" data-step="2">
               <h4><span class="fig1-num">2</span>Splice</h4>
+              <div class="fig1-split"><div class="fig1-split-main">
               <div class="fig1-splice">
                 <div class="sp-row"><span class="sp-lab">doc A</span><span class="seg s1">A1</span><span class="seg s2">A2</span><span class="sp-cut" aria-label="cut">✂</span><span class="seg s3">A3</span><span class="seg s4">A4</span></div>
                 <div class="sp-row"><span class="sp-lab">doc B</span><span class="seg b1">B1</span><span class="sp-cut" aria-label="cut">✂</span><span class="seg b2">B2</span><span class="seg b3">B3</span></div>
@@ -123,7 +125,7 @@
                 <div class="sp-row"><span class="sp-lab">new B</span><span class="seg b1">B1</span><span class="sp-join"></span><span class="seg s3">A3</span><span class="seg s4">A4</span></div>
                 <div class="sp-row sp-cf"><span class="sp-lab">counterfactual</span><span class="seg s3 is-ghost">A3</span><span class="sp-cf-note">originally followed A2</span></div>
               </div>
-              <ul class="fig1-facts"><li><b>15%</b> of segment boundaries are spliced: the continuations at those cuts are shuffled among them</li><li>The segment that originally followed a cut is the <b>counterfactual</b>; step 4 uses it for negative units</li><li>Documents that grow past the <b>2,048-token</b> context are cut; the trailing segments become new documents</li></ul>
+              </div><div class="fig1-split-side"><ul class="fig1-facts"><li><b>15%</b> of segment boundaries are spliced: the continuations at those cuts are shuffled among them</li><li>The segment that originally followed a cut is the <b>counterfactual</b>; step 4 uses it for negative units</li><li>Documents that grow past the <b>2,048-token</b> context are cut; the trailing segments become new documents</li></ul></div></div>
             </section>
             <section class="fig1-card" data-step="3">
               <h4><span class="fig1-num">3</span>Extract features</h4>

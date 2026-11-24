@@ -46,9 +46,11 @@
     // While walking, the caption is pinned to the bottom of the screen; keep the active card in the space above it.
     if (scroll && step) {
       const target = mode === "pretrain" ? pre.querySelector(`[data-step="${step}"]`) : steer;
+      // the contents bar, when shown, covers the top of the screen
+      const top = document.body.classList.contains("toc-shown") ? document.querySelector(".toc")?.offsetHeight || 0 : 0;
       const r = target.getBoundingClientRect(), room = window.innerHeight - cap.offsetHeight - 24;
-      if (r.top < 0 || r.bottom > room) {
-        const y = window.scrollY + r.top - (r.height > room ? 12 : room - r.height);
+      if (r.top < top || r.bottom > room) {
+        const y = window.scrollY + r.top - (r.height > room - top ? top + 12 : room - r.height);
         window.scrollTo({ top: Math.max(0, y), behavior: reduce ? "auto" : "smooth" });
       }
     }

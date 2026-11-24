@@ -30,12 +30,13 @@
   }
 
   function init(root) {
-    // Optional attack switch: data-alts='[{"label":"RL attacker","src":"...","step":"..."}, ...]' re-initializes on click.
+    // Optional attack switch: data-alts='[{"label":"RL attacker","src":"...","step":"...","desc":"..."}, ...]' re-initializes on click.
     if (root._rxStop) root._rxStop();
     root.textContent = "";
     if (root.dataset.alts) {
+      const alts = JSON.parse(root.dataset.alts);
       const sw = h("div", "rx-switch", null, root);
-      for (const a of JSON.parse(root.dataset.alts)) {
+      for (const a of alts) {
         const b = h("button", a.src === root.dataset.src ? "is-active" : null, tr(a.label), sw);
         b.type = "button";
         b.addEventListener("click", () => {
@@ -43,6 +44,9 @@
           root.dataset.src = a.src; root.dataset.stepLabel = a.step; init(root);
         });
       }
+      // what the selected attack does, right under the switch
+      const cur = alts.find((a) => a.src === root.dataset.src);
+      if (cur?.desc) h("p", "rx-desc", tr(cur.desc), root);
     }
     const src = root.dataset.src;
     const stepLabel = tr(root.dataset.stepLabel || "Strength");
@@ -112,6 +116,7 @@
           h("span", "rx-suffix-text", cell.suffix, s);
         }
         if (cell?.cmean) h("div", "rx-cmean", tr("This concept, all 10 instructions: concept {c} · fluency {f}", { c: cell.cmean.concept.toFixed(1), f: cell.cmean.fluency.toFixed(1) }), top);
+        h("div", "rx-reply-label", tr("Reply"), card);
         h("div", "rx-reply", cell ? cell.reply : tr("No reply saved for this setting."), card);
       }
       drawMini(idx);
